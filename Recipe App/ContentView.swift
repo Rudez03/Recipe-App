@@ -7,18 +7,40 @@
 
 import SwiftUI
 
-struct ContentView: View {
+
+//let gradientColors: [Color] = [
+//    .gradientTop,
+//    .gradientBot
+//]
+
+struct ContentView: View{
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
-        }
-        .padding()
+        //.navigationTitle("Home")
+        
+            
+                TabView {
+                    WelcomePage()
+			.tabItem {
+			    Label("Home", systemImage: "house.fill") //
+}
+                        //.background(Color.clear)
+			//.toolbarBackground(.hidden, for: .navigationBar)
+                    
+                    HomePage()
+                       // .background(Color.clear)
+                }
+                
+		.background(AppBackground())
+                .tabViewStyle(.page)
+		.foregroundStyle(.white)
+//
+        
     }
 }
 
 #Preview {
     ContentView()
+    
 }
+
