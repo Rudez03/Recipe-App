@@ -10,12 +10,21 @@ import SwiftUI
 struct RecipeCard: View {
 	var recipe: Recipe
     var body: some View {
-		VStack {
+        VStack (spacing: 8){
 			Text(recipe.name)
-			Text(recipe.prepTime)
+                .font(.title)
+			Text("prep-time: " + recipe.prepTime)
 			Text(recipe.description)
-				.backgroundStyle(RoundedRectangle)
 		}
+        .padding()
+        //.foregroundStyle(.white)
+        .background {
+            RoundedRectangle(cornerRadius: 12)
+                .foregroundStyle(.teal)
+                .opacity(0.25)
+            
+    
+        }
     }
 }
 
