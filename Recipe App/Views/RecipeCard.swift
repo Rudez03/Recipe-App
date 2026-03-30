@@ -13,7 +13,10 @@ struct RecipeCard: View {
         VStack (spacing: 8){
 			Text(recipe.name)
                 .font(.title)
-			Text("prep-time: " + recipe.prepTime)
+			HStack {
+				Image(systemName: "clock")
+				Text("\(recipe.prepTime)")
+			}
 			Text(recipe.description)
 		}
         .padding()
