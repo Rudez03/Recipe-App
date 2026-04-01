@@ -9,13 +9,15 @@ import SwiftUI
 
 struct RecipeCard: View {
 	var recipe: Recipe
+    
+    
     var body: some View {
         VStack (spacing: 8){
 			Text(recipe.name)
                 .font(.title)
 			HStack {
 				Image(systemName: "clock")
-				Text("\(recipe.prepTime)")
+                Text(recipe.prepTime)
 			}
 			Text(recipe.description)
 		}
@@ -32,8 +34,11 @@ struct RecipeCard: View {
 }
 
 #Preview {
-	var recipe = Recipe(name: "Cookies")
-	recipe.description = "Soft and chewy"
-	recipe.prepTime = "20 min"
+    var recipe = Recipe(name: "Cookies",
+                        description: "Soft and chewy",
+                        ingredients: [],
+                        prepTime: "20 min"
+    )
+    
 	return RecipeCard(recipe: recipe)
 }

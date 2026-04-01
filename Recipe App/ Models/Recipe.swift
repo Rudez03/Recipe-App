@@ -17,10 +17,10 @@ struct Recipe: Identifiable {
 	
 	var icon: String?
 	
-	init(name: String) {
+    init(name: String, description: String, ingredients: [String], prepTime: String) {
 		self.name = name
-		self.description = ""
-		self.ingredients = []
-		self.prepTime = ""
+		self.description = description
+		self.ingredients = ingredients
+		self.prepTime = prepTime
 	}
 }
