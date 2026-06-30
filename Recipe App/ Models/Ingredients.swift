@@ -14,4 +14,6 @@ struct Ingredients: Identifiable {
     let name: String
     let amount: String
     let unit: String
+    
+    //TODO: restructure
 }
