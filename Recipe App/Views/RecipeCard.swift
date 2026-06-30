@@ -15,14 +15,20 @@ struct RecipeCard: View {
         VStack (spacing: 8){
 			Text(recipe.name)
                 .font(.title)
+                .multilineTextAlignment(.center)
+            
+            
 			HStack {
 				Image(systemName: "clock")
                 Text(recipe.prepTime)
 			}
+            
 			Text(recipe.description)
+                .multilineTextAlignment(.center)
 		}
         .padding()
-        //.foregroundStyle(.white)
+        .frame(maxWidth: .infinity)
+        .frame(height: 140)
         .background {
             RoundedRectangle(cornerRadius: 12)
                 .foregroundStyle(.teal)

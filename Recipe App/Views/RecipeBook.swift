@@ -9,6 +9,24 @@ import SwiftUI
 
 struct RecipeBook: View {
     
+    @State private var searchText = ""
+    
+    let columns = [
+        GridItem(.flexible()),
+        GridItem(.flexible())
+    ]
+    
+    var recipesShown: [Recipe]  {
+        if searchText.isEmpty {
+            return recipes
+        }
+        else {
+            return recipes.filter { recipe in
+                recipe.name.lowercased().contains(searchText.lowercased())
+            }
+        }
+    }
+    
     let recipes: [Recipe] = [
         Recipe(name: "Cookies",
                description: "Soft and chewy",
@@ -26,18 +44,38 @@ struct RecipeBook: View {
                description: "Refreshing and Sweet",
                ingredients: [],
                prepTime: "15 mins"
-        )
+        ),
+        
+        Recipe(name: "Churro Cheesecake",
+               description: "Warm yet nastolgic",
+               ingredients: [],
+               prepTime: "1:30 hrs"
+        ),
+        
+        Recipe(name: "Macaroons",
+               description: "Delicous and cute",
+               ingredients: [],
+               prepTime: "2 hrs"
+        ),
+        
     ]
     var body: some View {
         // TODO: add navigation stack/bar
         //navigationTitle("Recipe Book")
-        ScrollView {
-            VStack(spacing: 15){
-                ForEach(recipes) { recipe in
-                    RecipeCard(recipe: recipe)
+        NavigationStack {
+            ScrollView {
+                LazyVGrid(columns: columns){
+                    ForEach(recipesShown) { recipe in
+                        RecipeCard(recipe: recipe)
+                    }
                 }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.top, 30)
+                .padding(.horizontal)
             }
-            .padding(.top, 100)
+            .navigationTitle("Recipe Book")
+            .searchable(text: $searchText, placement: .navigationBarDrawer)
+
         }
      
 
