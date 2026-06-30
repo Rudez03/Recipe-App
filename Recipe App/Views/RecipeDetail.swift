@@ -26,6 +26,19 @@ struct RecipeDetail: View {
             
             Text(recipe.description)
                 .font(.body)
+           // Spacer()
+            
+            Text("Ingredients")
+                .font(.title3.bold())
+            ForEach(recipe.ingredients) { ingredient in
+                HStack{
+                    Text(ingredient.amount)
+                    Text(ingredient.unit)
+                    Text(ingredient.name)
+                }
+            }
+            
+            
             Spacer()
         }
         
@@ -40,7 +53,8 @@ struct RecipeDetail: View {
     NavigationStack {
         RecipeDetail(recipe: Recipe(name: "Cookies",
                                     description: "Soft and chewy",
-                                    ingredients: [],
+                                    ingredients: [Ingredients(name: "Flour", amount: "2", unit: "cups"),
+                                        Ingredients(name: "Eggs", amount: "3", unit: "none")],
                                     prepTime: "20 min"
                                    )
                      

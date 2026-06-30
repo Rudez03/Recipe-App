@@ -12,15 +12,15 @@ struct Recipe: Identifiable {
 	
 	var name: String
 	var description: String
-	var ingredients: [String]
+	var ingredients: [Ingredients]
 	var prepTime: String
 	
 	var icon: String?
 	
-    init(name: String, description: String, ingredients: [String], prepTime: String) {
-		self.name = name
-		self.description = description
-		self.ingredients = ingredients
-		self.prepTime = prepTime
-	}
+//    init(name: String, description: String, ingredients: [String], prepTime: String) {
+//		self.name = name
+//		self.description = description
+//		self.ingredients = ingredients
+//		self.prepTime = prepTime
+//	}
 }
