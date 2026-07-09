@@ -12,7 +12,7 @@ struct Recipe: Identifiable {
 	
 	var name: String
 	var description: String
-	var ingredients: [Ingredients]
+	var ingredients: [Ingredient]
 	var prepTime: String
 	
 	var icon: String?
