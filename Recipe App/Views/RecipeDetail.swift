@@ -30,10 +30,12 @@ struct RecipeDetail: View {
             
             Text("Ingredients")
                 .font(.title3.bold())
+                .underline()
+                .padding(.bottom)
+            
+            
             ForEach(recipe.ingredients) { ingredient in
-                HStack{
-                    Text(ingredient.displayText)
-                }
+                IngredientRow(ingredient: ingredient)
             }
             
             
@@ -52,7 +54,7 @@ struct RecipeDetail: View {
         RecipeDetail(recipe: Recipe(name: "Cookies",
                                     description: "Soft and chewy",
                                     ingredients: [
-                                        Ingredient(name: "Flour", amount: "2", measurement: "cups"),
+                                        Ingredient(name: "Flour", amount: "2", measurement: "cups", notes: "sifted"),
                                         Ingredient(name: "Eggs", amount: "3")
                                     ],
                                     prepTime: "20 min"

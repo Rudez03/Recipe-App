@@ -8,11 +8,26 @@
 import SwiftUI
 
 struct IngredientRow: View {
+    
+    let ingredient: Ingredient
+    
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack{
+            HStack{
+                Image(systemName: "circle")
+                    .font(.caption)
+                Text(ingredient.displayText)
+            }
+            if let notes = ingredient.notes {
+                Text(" \(notes)")
+                    .italic()
+                    .font(.body)
+            }
+        }
     }
 }
 
-#Preview {
-    IngredientRow()
-}
+//#Preview {
+//    IngredientRow()
+//}
