@@ -85,16 +85,3 @@ struct RecipeBook: View {
 #Preview {
     RecipeBook()
 }
-
-
-//        Text("Recipe Book")
-//            //.navigationTitle("Recipes")
-//            .font(.title)
-//            //.padding(.bottom, 20)
-//        VStack{
-//            List {
-//                Text("Concha Cupcakes")
-//                Text("Chocolate Chip Cookies")
-//                Text("Cookies")
-//            }
-//        }
