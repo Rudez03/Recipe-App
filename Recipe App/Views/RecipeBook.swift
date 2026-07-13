@@ -70,9 +70,9 @@ struct RecipeBook: View {
                             RecipeDetail(recipe: recipe)
                         } label: {
                             RecipeCard(recipe: recipe)
-                                .foregroundColor(.black)
                                 
                         }
+                        .buttonStyle(.plain)
                     }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)

@@ -16,13 +16,14 @@ struct RecipeDetail: View {
                     HStack{
                         Label(recipe.prepTime, systemImage: "clock")
                             .padding()
+                        Spacer()
                         
                         if let servings = recipe.servings {
                             Label(
                                     "\(servings) servings",
                                     systemImage: "person.crop.circle"
                                 )
-                            .padding(.leading, 80)
+                            .padding()
                         }
                         else {
                             Label("Serving Size", systemImage: "person.crop.circle")
