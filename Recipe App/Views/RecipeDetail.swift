@@ -11,7 +11,6 @@ struct RecipeDetail: View {
     let recipe: Recipe
     
     var body: some View {
-        NavigationStack {
             ScrollView {
                 VStack(alignment: .leading){
                     HStack{
@@ -19,11 +18,15 @@ struct RecipeDetail: View {
                             .padding()
                         
                         if let servings = recipe.servings {
-                            Text("\(servings) servings")
+                            Label(
+                                    "\(servings) servings",
+                                    systemImage: "person.crop.circle"
+                                )
+                            .padding(.leading, 80)
                         }
                         else {
                             Label("Serving Size", systemImage: "person.crop.circle")
-                                .padding()
+                                .padding(.leading, 80)
                         }
                         //Spacer()
                     }
@@ -49,7 +52,13 @@ struct RecipeDetail: View {
                         .padding(.top,5)
                         .padding(.bottom, 5)
 
-                    // TODO: add message
+                    if let instructions = recipe.instructions {
+                        Text("\(instructions)")
+                    }
+                    else{
+                        //will be a button!
+                        Text("Add your instructions +")
+                    }
                     Spacer()
                     
                     
@@ -57,7 +66,6 @@ struct RecipeDetail: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             
-        }
         .padding()
         .navigationTitle(recipe.name)
         .navigationBarTitleDisplayMode(.large)
@@ -74,7 +82,7 @@ struct RecipeDetail: View {
                                         Ingredient(name: "Eggs", amount: "3")
                                     ],
                                     prepTime: "20 min",
-                                    
+                                    servings: 10
                                    )
                      
         )

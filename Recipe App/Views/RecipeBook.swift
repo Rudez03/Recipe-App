@@ -66,7 +66,13 @@ struct RecipeBook: View {
             ScrollView {
                 LazyVGrid(columns: columns){
                     ForEach(recipesShown) { recipe in
-                        RecipeCard(recipe: recipe)
+                        NavigationLink {
+                            RecipeDetail(recipe: recipe)
+                        } label: {
+                            RecipeCard(recipe: recipe)
+                                .foregroundColor(.black)
+                                
+                        }
                     }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
