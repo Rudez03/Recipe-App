@@ -20,16 +20,4 @@ struct Recipe: Identifiable {
     // make a list of strings I think....
     var instructions: String?
     
-    
-    
-    
-    
-    
-	
-//    init(name: String, description: String, ingredients: [String], prepTime: String) {
-//		self.name = name
-//		self.description = description
-//		self.ingredients = ingredients
-//		self.prepTime = prepTime
-//	}
 }

@@ -13,14 +13,16 @@ struct IngredientRow: View {
     
     
     var body: some View {
-        HStack(alignment: .top){
+        HStack(alignment: .firstTextBaseline){
             Image(systemName: "circle")
                 .font(.caption)
+                .offset(y: -1)
             VStack(alignment: .leading, spacing: 1){
                 Text(ingredient.displayText)
                 
                 if let notes = ingredient.notes {
                     Text("\(notes)")
+                        .foregroundColor(.secondary)
                         .italic()
                         .font(.subheadline)
                         .padding(.leading, 15)
