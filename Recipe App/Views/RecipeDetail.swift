@@ -15,7 +15,7 @@ struct RecipeDetail: View {
                 VStack(alignment: .leading){
                     
                     // MARK: - Header
-                    Text("\(recipe.name)")
+                    Text(recipe.name)
                         .font(.title)
                         .fontWeight(.semibold)
                         .padding(.top, 20)

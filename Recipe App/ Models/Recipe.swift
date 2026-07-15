@@ -11,9 +11,9 @@ struct Recipe: Identifiable {
 	let id = UUID()
 	
 	var name: String
-	var description: String
-	var ingredients: [Ingredient]
-	var prepTime: String
+	var description: String = ""
+    var ingredients: [Ingredient] = []
+	var prepTime: String = ""
     var servings: Int?
 	
 	var icon: String?

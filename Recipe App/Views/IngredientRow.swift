@@ -13,7 +13,7 @@ struct IngredientRow: View {
     
     
     var body: some View {
-        HStack(alignment: .firstTextBaseline){
+        HStack(alignment: .firstTextBaseline) {
             Image(systemName: "circle")
                 .font(.caption)
                 .offset(y: -1)
@@ -21,7 +21,7 @@ struct IngredientRow: View {
                 Text(ingredient.displayText)
                 
                 if let notes = ingredient.notes {
-                    Text("\(notes)")
+                    Text(notes)
                         .foregroundColor(.secondary)
                         .italic()
                         .font(.subheadline)

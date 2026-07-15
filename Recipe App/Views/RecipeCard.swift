@@ -40,7 +40,7 @@ struct RecipeCard: View {
 }
 
 #Preview {
-    var recipe = Recipe(name: "Cookies",
+    let recipe = Recipe(name: "Cookies",
                         description: "Soft and chewy",
                         ingredients: [],
                         prepTime: "20 min"
