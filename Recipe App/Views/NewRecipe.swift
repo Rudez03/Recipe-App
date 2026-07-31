@@ -9,6 +9,8 @@ import SwiftUI
 
 struct NewRecipe: View {
     @State private var recipe = Recipe(name:"")
+    @State var hours = 0
+    @State var mins = 0
     var body: some View {
         VStack(alignment: .leading) {
             
@@ -24,24 +26,48 @@ struct NewRecipe: View {
             // MARK: - Time and Servings
             HStack{
                 
+                // MARK: hrs
                 Image(systemName: "clock")
                     .padding(.leading)
-                TextField("time", text: $recipe.prepTime)
                 
+               // TextField("time", text: $recipe.prepTime)
+                Picker("Hours", selection: $hours) {
+                    ForEach(0...24, id: \.self) { hr in
+                        Text("\(hr) hrs")
+                            .tag(hr)
+                    }
+                }
+                .pickerStyle(.menu)
+                .fixedSize(horizontal: true, vertical: false)
+                
+                // MARK: Mins
+                Picker("Mins", selection: $mins) {
+                    ForEach(Array(stride(from: 0, through: 55, by: 5)), id: \.self) { min in
+                        Text("\(min) mins")
+                            .tag(min)
+                    }
+                } 
+                .pickerStyle(.menu)
+                .fixedSize(horizontal: true, vertical: false)
                 Spacer()
                 
+                
+                // MARK: - Servings
                 Image(systemName: "person.crop.circle")
                 Picker("serving size", selection: $recipe.servings) {
                     Text("Not Set")
                         .tag(nil as Int?)
+                    
                     ForEach( 1...20, id: \.self) { number in
                         Text("\(number) servings")
                             .tag(Optional(number))
-                            
+                        
                     }
                 }
-                .pickerStyle(.menu)
+                
             }
+                .pickerStyle(.menu)
+        }
             .padding(.bottom)
             
             // MARK: - Description
@@ -85,9 +111,7 @@ struct NewRecipe: View {
             
         }
     }
-}
 
 #Preview {
-    NewRecipe(
-    )
+    NewRecipe()
 }

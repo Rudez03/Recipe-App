@@ -23,7 +23,7 @@ struct RecipeDetail: View {
                     
                     // MARK: - Time and Servings
                     HStack{
-                        Label(recipe.prepTime, systemImage: "clock")
+                        Label("time", systemImage: "clock")
                         Spacer()
                         
                         if let servings = recipe.servings {
@@ -187,7 +187,7 @@ struct RecipeDetail: View {
                     notes: "Use a good-quality olive oil because the flavor is noticeable in the finished dish."
                 )
             ],
-            prepTime: "1 hr 45 mins",
+            
             instructions: """
             1. Bring a large pot of generously salted water to a boil.
 
