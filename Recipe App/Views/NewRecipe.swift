@@ -26,6 +26,8 @@ struct NewRecipe: View {
                     .padding(.leading)
                     .padding(.trailing)
                 
+                
+                
                 // MARK: - Time and Servings
                 HStack{
                     
@@ -55,6 +57,7 @@ struct NewRecipe: View {
                     Spacer()
                     
                     
+
                     // MARK: - Servings
                     Image(systemName: "person.crop.circle")
                     Picker("serving size", selection: $recipe.servings) {
@@ -70,8 +73,8 @@ struct NewRecipe: View {
                     
                 }
                 .pickerStyle(.menu)
-                
                 .padding(.bottom)
+                
                 
                 
                 // MARK: - Description
@@ -84,6 +87,7 @@ struct NewRecipe: View {
                  .padding(.trailing,10)
                 
                 
+                
                 // MARK: - Ingredients
                 Text("Ingredients")
                     .font(.title3.bold())
@@ -92,7 +96,7 @@ struct NewRecipe: View {
                     .padding(.bottom, 5)
                 
                 Button(action: {
-                    isShowingSheet = true
+                    isShowingSheet.toggle()
                     print("added Ingredient")
                 }) {
                     HStack{
@@ -104,10 +108,19 @@ struct NewRecipe: View {
                     .foregroundStyle(.gray)
                 }
                 .padding(.leading)
+                .sheet(isPresented: $isShowingSheet) {
+                    print("Added")
+                } content: {
+                    NavigationStack{
+                        IngredientEditor()
+                            .presentationDetents([.medium, .large])
+                    }
+                }
                 
                 ForEach(recipe.ingredients) { ingredient in
                     IngredientRow(ingredient: ingredient)
                 }
+                
                 
                 
                 // MARK: - Instructions
