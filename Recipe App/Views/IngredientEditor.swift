@@ -35,7 +35,7 @@ struct IngredientEditor: View {
 							.frame(width:300 )
 							
 						HStack{
-							TextField("0", value: $ingredient.amount, format: .number)
+							TextField("0", text: $ingredient.amount)
 								.keyboardType(.numberPad)
 								//.padding(.leading)
 								.font(.title3)
@@ -44,7 +44,16 @@ struct IngredientEditor: View {
 							Divider()
 								.frame(height: 30)
 								.frame(width: 50)
+                            Picker("Unit", selection: $ingredient.unit) {
+                                ForEach(IngredientUnit.allCases, id: \.self) { unit in
+									Text(unit.displayName)
+										.tag(unit)
+                                
+                                    
+                                }
+                            }
 						}
+						
 						
 						
 					}
@@ -53,6 +62,17 @@ struct IngredientEditor: View {
 				}
 				.padding(.leading)
 				.padding(.trailing)
+				.padding(.bottom)
+				
+				
+				
+				TextField("Add Notes", text: $ingredient.notes, axis: .vertical)
+					.lineLimit(2...4)
+					.font(.body)
+					.multilineTextAlignment(.leading)
+					.padding(.bottom, 20)
+					.padding(.leading,20)
+					.padding(.trailing,10)
 			}
         }
         .navigationBarTitle("Editor Screen")
