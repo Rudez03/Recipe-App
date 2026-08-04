@@ -98,46 +98,46 @@ struct RecipeDetail: View {
 
                 Ingredient(
                     name: "Boneless Skinless Chicken Breasts",
-                    amount: "2",
+                    amount: 2,
                     measurement: "lbs",
                     notes: "Slice into thin cutlets for quicker cooking and more even browning."
                 ),
 
                 Ingredient(
                     name: "Fettuccine Pasta",
-                    amount: "16",
+                    amount: 16,
                     measurement: "oz"
                 ),
 
                 Ingredient(
                     name: "Heavy Whipping Cream",
-                    amount: "2",
+                    amount: 2,
                     measurement: "cups",
                     notes: "Bring to room temperature before adding to prevent the sauce from separating."
                 ),
 
                 Ingredient(
                     name: "Freshly Grated Parmesan Cheese",
-                    amount: "2½",
+                    amount: 2,
                     measurement: "cups",
                     notes: "Avoid pre-shredded cheese because it contains anti-caking agents that can make the sauce grainy and prevent it from melting smoothly."
                 ),
 
                 Ingredient(
                     name: "Roasted Garlic Cloves",
-                    amount: "8"
+                    amount: 8
                 ),
 
                 Ingredient(
                     name: "Sun-Dried Tomatoes Packed in Olive Oil",
-                    amount: "¾",
+                    amount: 3,
                     measurement: "cup",
                     notes: "Drain well before chopping into bite-sized pieces."
                 ),
 
                 Ingredient(
                     name: "Fresh Basil Leaves",
-                    amount: "¼",
+                    amount: 1,
                     measurement: "cup"
                 ),
 
@@ -151,38 +151,38 @@ struct RecipeDetail: View {
 
                 Ingredient(
                     name: "Unsalted Butter",
-                    amount: "4",
+                    amount: 4,
                     measurement: "tbsp"
                 ),
 
                 Ingredient(
                     name: "Italian Seasoning Blend",
-                    amount: "2",
+                    amount: 2,
                     measurement: "tsp",
                     notes: "If using homemade seasoning, increase the oregano slightly for additional flavor."
                 ),
 
                 Ingredient(
                     name: "Crushed Red Pepper Flakes",
-                    amount: "½",
+                    amount: 1,
                     measurement: "tsp"
                 ),
 
                 Ingredient(
                     name: "Fresh Lemon Juice",
-                    amount: "1",
+                    amount: 1,
                     measurement: "tbsp"
                 ),
 
                 Ingredient(
                     name: "Fresh Parsley",
-                    amount: "2",
+                    amount: 2,
                     measurement: "tbsp"
                 ),
 
                 Ingredient(
                     name: "Extra Virgin Olive Oil",
-                    amount: "2",
+                    amount: 2,
                     measurement: "tbsp",
                     notes: "Use a good-quality olive oil because the flavor is noticeable in the finished dish."
                 )

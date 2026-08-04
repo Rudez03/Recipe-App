@@ -18,7 +18,7 @@ struct IngredientRow: View {
                 .font(.caption)
                 .offset(y: -1)
             VStack(alignment: .leading, spacing: 1){
-                Text(ingredient.displayText)
+                //Text(ingredient.displayText)
                 
                 if let notes = ingredient.notes {
                     Text(notes)

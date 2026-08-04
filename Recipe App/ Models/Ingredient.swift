@@ -12,7 +12,7 @@ struct Ingredient: Identifiable {
     let id: UUID = UUID()
     
     var name: String
-    var amount: String?
+    var amount: Int?
     var measurement: String?
     var notes: String?
     

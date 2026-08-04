@@ -13,10 +13,47 @@ struct IngredientEditor: View {
     
     var body: some View {
         ScrollView {
-            VStack {
-                
-                    
-            }
+			VStack {
+				ZStack {
+					Capsule()
+						.fill(Color.gray.opacity(0.2))
+						.frame(height: 50)
+						.padding(.leading)
+						.padding(.trailing)
+					TextField("Ingredient Name", text: $ingredient.name)
+						.font(.title)
+						.padding(.leading, 40)
+				}
+				.padding(.top,25)
+				.padding(.bottom, 5)
+				
+				HStack{
+					ZStack{
+						Capsule()
+							.fill(Color.gray.opacity(0.2))
+							.frame(height: 40)
+							.frame(width:300 )
+							
+						HStack{
+							TextField("0", value: $ingredient.amount, format: .number)
+								.keyboardType(.numberPad)
+								//.padding(.leading)
+								.font(.title3)
+								.frame(width: 60)
+							
+							Divider()
+								.frame(height: 30)
+								.frame(width: 50)
+						}
+						
+						
+					}
+					//.frame(width: 150 )
+					Spacer()
+				}
+				.padding(.leading)
+				.padding(.trailing)
+			}
         }
         .navigationBarTitle("Editor Screen")
         .navigationBarTitleDisplayMode(.inline)
