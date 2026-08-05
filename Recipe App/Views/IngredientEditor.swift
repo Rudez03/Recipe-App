@@ -99,7 +99,7 @@ struct IngredientEditor: View {
 #Preview {
     NavigationStack {
         IngredientEditor{ savedIngredient in
-            print(savedIngredient)
+            print("savedIngredient")
         }
     }
 }

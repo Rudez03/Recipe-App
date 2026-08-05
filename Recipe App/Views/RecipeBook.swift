@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct RecipeBook: View {
-    
+    @State private var isShowingRecipe = false
     @State private var searchText = ""
     
     @State private var recipes: [Recipe] = [
@@ -204,11 +204,25 @@ struct RecipeBook: View {
             .searchable(text: $searchText, placement: .navigationBarDrawer)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button("Add Recipe", systemImage: "plus", action: {
+                    Button(action: {
+                        isShowingRecipe.toggle()
                         print("hello")
-                    })
+                    }) {
+                        HStack{
+                            Image(systemName: "plus")
+                        }
+                       // .foregroundStyle(.black)
+                    }
+                    .fullScreenCover(isPresented: $isShowingRecipe) {
+                        print("Added")
+                    } content: {
+                        NavigationStack {
+                            NewRecipe{ savedRecipe in
+                                recipes.append(savedRecipe)
+                            }
+                        }
+                    }
                 }
-                
             }
             
             
@@ -219,5 +233,5 @@ struct RecipeBook: View {
 }
 
 #Preview {
-    RecipeBook()
+        RecipeBook()
 }

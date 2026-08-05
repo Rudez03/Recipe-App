@@ -11,8 +11,12 @@ struct NewRecipe: View {
     @State private var recipe = Recipe(name:"")
     @State var hours = 0
     @State var mins = 0
+    @Environment(\.dismiss) private var dismiss
+    var onSave: (Recipe) -> Void
     
-    @State private var isShowingSheet = false
+    @State private var isShowingIngredient = false
+    
+    
     var body: some View {
         ScrollView {
             VStack(alignment: .leading) {
@@ -100,7 +104,7 @@ struct NewRecipe: View {
                     .padding(.leading)
                 
                 Button(action: {
-                    isShowingSheet.toggle()
+                    isShowingIngredient.toggle()
                     print("added Ingredient")
                 }) {
                     HStack{
@@ -112,7 +116,7 @@ struct NewRecipe: View {
                     .foregroundStyle(.gray)
                 }
                 .padding(.leading)
-                .sheet(isPresented: $isShowingSheet) {
+                .sheet(isPresented: $isShowingIngredient) {
                     print("Added")
                 } content: {
                     NavigationStack{
@@ -150,9 +154,29 @@ struct NewRecipe: View {
             
         }
         .frame(maxWidth: .infinity, alignment: .leading)
+        .navigationBarTitle("New Recipe")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .confirmationAction) {
+                Button("Save"){
+                    onSave(recipe)
+                    dismiss()
+                }
+            }
+            ToolbarItem(placement: .cancellationAction) {
+                Button("Cancel"){
+                    dismiss()
+                }
+            }
+        }
     }
+        
 }
 
 #Preview {
-    NewRecipe()
+    NavigationStack{
+        NewRecipe{ savedRecipe in
+            print("savedRecipe")
+        }
+    }
 }
