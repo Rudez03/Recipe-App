@@ -28,7 +28,7 @@ enum IngredientUnit: CaseIterable {
 		
 		switch self {
 			case .none: return "Unit"
-			case .cups: return "C"
+			case .cups: return "c"
 			case .grams: return "g"
 			case .kilogram: return "kg"
 			case .liter: return "L"

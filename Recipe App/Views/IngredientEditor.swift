@@ -11,6 +11,8 @@ struct IngredientEditor: View {
     @State private var ingredient = Ingredient(name:"")
     @Environment(\.dismiss) private var dismiss
     
+    var onSave: (Ingredient) -> Void
+    
     var body: some View {
         ScrollView {
 			VStack {
@@ -36,7 +38,7 @@ struct IngredientEditor: View {
 							
 						HStack{
 							TextField("0", text: $ingredient.amount)
-								.keyboardType(.numberPad)
+								//.keyboardType(.numberPad)
 								//.padding(.leading)
 								.font(.title3)
 								.frame(width: 60)
@@ -80,7 +82,8 @@ struct IngredientEditor: View {
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
                 Button("Save"){
-                        dismiss()
+                    onSave(ingredient)
+                    dismiss()
                 }
             }
             ToolbarItem(placement: .cancellationAction) {
@@ -95,6 +98,8 @@ struct IngredientEditor: View {
 }
 #Preview {
     NavigationStack {
-        IngredientEditor()
+        IngredientEditor{ savedIngredient in
+            print(savedIngredient)
+        }
     }
 }

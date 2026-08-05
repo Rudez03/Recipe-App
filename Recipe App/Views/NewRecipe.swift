@@ -94,6 +94,10 @@ struct NewRecipe: View {
                     .padding(.leading)
                 //.underline()
                     .padding(.bottom, 5)
+                ForEach(recipe.ingredients) { ingredient in
+                    IngredientRow(ingredient: ingredient)
+                }
+                    .padding(.leading)
                 
                 Button(action: {
                     isShowingSheet.toggle()
@@ -112,14 +116,14 @@ struct NewRecipe: View {
                     print("Added")
                 } content: {
                     NavigationStack{
-                        IngredientEditor()
+                        IngredientEditor{ savedIngredient in
+                            recipe.ingredients.append(savedIngredient)
+                        }
                             .presentationDetents([.medium, .large])
                     }
                 }
                 
-                ForEach(recipe.ingredients) { ingredient in
-                    IngredientRow(ingredient: ingredient)
-                }
+                
                 
                 
                 
