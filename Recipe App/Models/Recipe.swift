@@ -17,28 +17,30 @@ struct Recipe: Identifiable {
 	var description: String = ""
     var ingredients: [Ingredient] = []
 	var prepTime: String = ""
-    var totalMins: Int?
+    var totalMins: Int = 0
     var servings: Int?
     var icon: String?
     // make a list of strings I think....
     var instructions: String?
     
     // MARK: - Computed Properties
-//    var totalMins: Int {
-//        let hoursInMin = (hours ?? 0) * 60
-//        let selectedMins = mins ?? 0
-//        
-//        return hoursInMin + selectedMins
-//    }
-    
-//    var displayTime: String {
-//        if totalMins == 0 {
-//            return ""
-//        }
-//        else {
-//            
-//        }
-//    }
+    var displayTime: String {
+        if totalMins == 0 {
+            return "N/A"
+        }
+        else {
+            let hours = totalMins/60
+            let rMins = totalMins%60
+            
+            if hours == 0 {
+                return "\(rMins) mins"
+            }
+            else {
+                return "\(hours) hrs \(rMins) mins"
+            }
+           
+        }
+    }
     
     
     

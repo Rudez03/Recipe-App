@@ -20,7 +20,7 @@ struct RecipeCard: View {
             
 			HStack {
 				Image(systemName: "clock")
-                Text(recipe.prepTime)
+                Text(recipe.displayTime)
 			}
             
 			Text(recipe.description)

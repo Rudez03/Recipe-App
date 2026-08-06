@@ -105,7 +105,6 @@ struct NewRecipe: View {
                 
                 Button(action: {
                     isShowingIngredient.toggle()
-                    print("added Ingredient")
                 }) {
                     HStack{
                         Image(systemName: "plus.circle")
@@ -117,7 +116,6 @@ struct NewRecipe: View {
                 }
                 .padding(.leading)
                 .sheet(isPresented: $isShowingIngredient) {
-                    print("Added")
                 } content: {
                     NavigationStack{
                         IngredientEditor{ savedIngredient in
@@ -159,6 +157,7 @@ struct NewRecipe: View {
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
                 Button("Save"){
+                    recipe.totalMins = (hours * 60) + mins
                     onSave(recipe)
                     dismiss()
                 }

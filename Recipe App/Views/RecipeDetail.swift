@@ -23,7 +23,7 @@ struct RecipeDetail: View {
                     
                     // MARK: - Time and Servings
                     HStack{
-                        Label("time", systemImage: "clock")
+                        Label("\(recipe.displayTime)", systemImage: "clock")
                         Spacer()
                         
                         if let servings = recipe.servings {
@@ -31,13 +31,14 @@ struct RecipeDetail: View {
                                     "\(servings) servings",
                                     systemImage: "person.crop.circle"
                                 )
-                            .padding()
+                            .padding(5)
                         }
                         else {
                             Label("Serving Size", systemImage: "person.crop.circle")
-                                .padding(.leading, 80)
-                        }
-                        //Spacer()
+								//.padding(5)
+							
+								
+						}
                     }
                     .padding(.bottom)
                     

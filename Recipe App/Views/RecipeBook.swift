@@ -15,25 +15,25 @@ struct RecipeBook: View {
         Recipe(name: "Cookies",
                        description: "Soft and chewy",
                        ingredients: [],
-                       prepTime: "20 mins"
+                       totalMins: 20
                 ),
         
                 Recipe(name: "Concha Cupcakes",
                        description: "Sweet and cute",
                        ingredients: [],
-                       prepTime: "45 mins"
+                       totalMins: 45
                 ),
         
                 Recipe(name: "Strawberry Cheesecake",
                        description: "Refreshing and Sweet",
                        ingredients: [],
-                       prepTime: "15 mins"
+                       totalMins: 15
                 ),
         
                 Recipe(name: "Churro Cheesecake",
                        description: "Warm yet nastolgic",
                        ingredients: [],
-                       prepTime: "1:30 hrs"
+					   totalMins: 90
                 ),
         Recipe(
                    name: "Roasted Garlic Parmesan Chicken Alfredo with Sun-Dried Tomatoes and Fresh Basil",
@@ -131,7 +131,7 @@ struct RecipeBook: View {
                             notes: "Use a good-quality olive oil because the flavor is noticeable in the finished dish."
                         )
                    ],
-                   prepTime: "1 hr 45 mins",
+                   totalMins: 105,
                    
                    instructions: """
                    1. Bring a large pot of generously salted water to a boil.
@@ -191,7 +191,7 @@ struct RecipeBook: View {
                                     
                                 }
                                 .buttonStyle(.plain)
-                            }
+                             }
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.top, 30)
@@ -206,7 +206,6 @@ struct RecipeBook: View {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button(action: {
                         isShowingRecipe.toggle()
-                        print("hello")
                     }) {
                         HStack{
                             Image(systemName: "plus")
@@ -214,7 +213,6 @@ struct RecipeBook: View {
                        // .foregroundStyle(.black)
                     }
                     .fullScreenCover(isPresented: $isShowingRecipe) {
-                        print("Added")
                     } content: {
                         NavigationStack {
                             NewRecipe{ savedRecipe in

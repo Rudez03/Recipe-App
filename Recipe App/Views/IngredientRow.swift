@@ -26,7 +26,11 @@ struct IngredientRow: View {
                         .italic()
                         .font(.subheadline)
                         .padding(.leading, 15)
+						.padding(.bottom,5)
                 }
+				else{
+					Spacer()
+				}
             }
         }
     }
