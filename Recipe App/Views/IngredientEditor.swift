@@ -11,12 +11,30 @@ struct IngredientEditor: View {
     @State private var ingredient = Ingredient(name:"")
     @Environment(\.dismiss) private var dismiss
     
+	
+	//MARK: - Saving function/validation
     var onSave: (Ingredient) -> Void
-    
+	private var canSave: Bool {
+		!ingredient.name
+			.trimmingCharacters(in: .whitespacesAndNewlines)
+			.isEmpty
+	}
+	
+	//MARK: - Keyboard Focus cases
+	enum Field {
+		case name
+		case amount
+	}
+	@FocusState private var focusedField: Field?
+	
+	
+	
+	
     var body: some View {
         ScrollView {
 			VStack {
 				ZStack {
+					// MARK: - Ingredient Name
 					Capsule()
 						.fill(Color.gray.opacity(0.2))
 						.frame(height: 50)
@@ -25,10 +43,17 @@ struct IngredientEditor: View {
 					TextField("Ingredient Name", text: $ingredient.name)
 						.font(.title)
 						.padding(.leading, 40)
+						.focused($focusedField, equals: .name)
+						.submitLabel(.next)
+						.onSubmit {
+							focusedField = .amount
+						}
 				}
 				.padding(.top,25)
 				.padding(.bottom, 5)
 				
+				
+				//MARK: - Amount/Unit
 				HStack{
 					ZStack{
 						Capsule()
@@ -37,15 +62,21 @@ struct IngredientEditor: View {
 							.frame(width:300 )
 							
 						HStack{
+							// Amount
 							TextField("0", text: $ingredient.amount)
-								//.keyboardType(.numberPad)
-								//.padding(.leading)
 								.font(.title3)
 								.frame(width: 60)
+								.focused($focusedField, equals: .amount)
+									.submitLabel(.done)
+									.onSubmit {
+										focusedField = nil
+									}
 							
 							Divider()
 								.frame(height: 30)
 								.frame(width: 50)
+							
+							// Unit picker
                             Picker("Unit", selection: $ingredient.unit) {
                                 ForEach(IngredientUnit.allCases, id: \.self) { unit in
 									Text(unit.displayName)
@@ -67,7 +98,7 @@ struct IngredientEditor: View {
 				.padding(.bottom)
 				
 				
-				
+				// MARK: - Notes Optional
 				TextField("Add Notes", text: $ingredient.notes, axis: .vertical)
 					.lineLimit(2...4)
 					.font(.body)
@@ -79,12 +110,15 @@ struct IngredientEditor: View {
         }
         .navigationBarTitle("Editor Screen")
         .navigationBarTitleDisplayMode(.inline)
+		
+		//MARK: - Save/Cancel
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
                 Button("Save"){
                     onSave(ingredient)
                     dismiss()
                 }
+				.disabled(!canSave)
             }
             ToolbarItem(placement: .cancellationAction) {
                 Button("Cancel"){

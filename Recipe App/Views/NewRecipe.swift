@@ -13,10 +13,17 @@ struct NewRecipe: View {
     @State var mins = 0
     @Environment(\.dismiss) private var dismiss
 
-	@FocusState private var nameFocus: Bool
+	// MARK: - Saving fucntion/Validation
+	var onSave: (Recipe) -> Void
+	private var canSave: Bool {
+		!recipe.name
+			.trimmingCharacters(in: .whitespacesAndNewlines)
+			.isEmpty
+	}
 	
-    var onSave: (Recipe) -> Void
-    
+	// Keyboard dismissal
+	@FocusState private var isFocused: Bool
+	
     @State private var isShowingIngredient = false
     
     
@@ -25,15 +32,18 @@ struct NewRecipe: View {
             VStack(alignment: .leading) {
                 
                 // MARK: - Header
-                TextField("Recipe Name", text: $recipe.name, axis: .vertical)
-					.focused($nameFocus)
+                TextField("Recipe Name", text: $recipe.name)
+					.focused($isFocused)
                     .font(.title)
                     .fontWeight(.semibold)
                     .padding(.top, 40)
                     .padding(.bottom, 20)
                     .padding(.leading)
                     .padding(.trailing)
-					
+					.submitLabel(.done)
+					.onSubmit {
+						isFocused = false
+					}
                 
                 
                 
@@ -87,12 +97,22 @@ struct NewRecipe: View {
                 
                 // MARK: - Description
                 TextField("Add Desciption", text: $recipe.description, axis: .vertical)
+					.focused($isFocused)
                     .lineLimit(2...4)
                     .font(.body)
                     .multilineTextAlignment(.leading)
                     .padding(.bottom, 20)
                     .padding(.leading)
-                 .padding(.trailing,10)
+					.padding(.trailing,10)
+					.submitLabel(.done)
+					.onChange(of: recipe.description) { oldValue, newValue in
+						guard isFocused else { return }
+						guard newValue.last == "\n" else { return }
+
+						recipe.description.removeLast()
+						isFocused = false
+					}
+					
                 
                 
                 
@@ -100,13 +120,14 @@ struct NewRecipe: View {
                 Text("Ingredients")
                     .font(.title3.bold())
                     .padding(.leading)
-                //.underline()
                     .padding(.bottom, 5)
+				
                 ForEach(recipe.ingredients) { ingredient in
                     IngredientRow(ingredient: ingredient)
                 }
-                    .padding(.leading)
-                
+				.padding(.leading)
+				
+                // ingredient sheet presentation
                 Button(action: {
                     isShowingIngredient.toggle()
                 }) {
@@ -125,7 +146,7 @@ struct NewRecipe: View {
                         IngredientEditor{ savedIngredient in
                             recipe.ingredients.append(savedIngredient)
                         }
-                            .presentationDetents([.medium, .large])
+                            //.presentationDetents([.medium, .large])
                     }
                 }
                 
@@ -145,7 +166,7 @@ struct NewRecipe: View {
                         .padding(.leading)
                 }
                 else{
-                    //will be a button!
+                    // TODO: will be a button!
                     Text("Add your instructions +")
                         .padding(.leading)
                 }
@@ -157,6 +178,8 @@ struct NewRecipe: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .navigationBarTitle("New Recipe")
         .navigationBarTitleDisplayMode(.inline)
+		
+		// MARK: - Saving/Cancel actions
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
                 Button("Save"){
@@ -164,19 +187,13 @@ struct NewRecipe: View {
                     onSave(recipe)
                     dismiss()
                 }
+				.disabled(!canSave)
             }
             ToolbarItem(placement: .cancellationAction) {
                 Button("Cancel"){
                     dismiss()
                 }
             }
-			ToolbarItemGroup(placement: .keyboard) {
-					Spacer()
-
-					Button("Done") {
-						nameFocus = false
-					}
-				}
         }
     }
         
