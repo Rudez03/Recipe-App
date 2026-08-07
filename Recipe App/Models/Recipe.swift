@@ -35,9 +35,12 @@ struct Recipe: Identifiable {
             if hours == 0 {
                 return "\(rMins) mins"
             }
-            else {
+            else if rMins != 0 {
                 return "\(hours) hrs \(rMins) mins"
             }
+			else {
+				return "\(hours) hrs"
+			}
            
         }
     }

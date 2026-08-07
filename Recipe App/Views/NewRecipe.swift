@@ -12,6 +12,9 @@ struct NewRecipe: View {
     @State var hours = 0
     @State var mins = 0
     @Environment(\.dismiss) private var dismiss
+
+	@FocusState private var nameFocus: Bool
+	
     var onSave: (Recipe) -> Void
     
     @State private var isShowingIngredient = false
@@ -23,12 +26,14 @@ struct NewRecipe: View {
                 
                 // MARK: - Header
                 TextField("Recipe Name", text: $recipe.name, axis: .vertical)
+					.focused($nameFocus)
                     .font(.title)
                     .fontWeight(.semibold)
                     .padding(.top, 40)
                     .padding(.bottom, 20)
                     .padding(.leading)
                     .padding(.trailing)
+					
                 
                 
                 
@@ -39,7 +44,6 @@ struct NewRecipe: View {
                     Image(systemName: "clock")
                         .padding(.leading)
                     
-                    // TextField("time", text: $recipe.prepTime)
                     Picker("Hours", selection: $hours) {
                         ForEach(0...24, id: \.self) { hr in
                             Text("\(hr) hrs")
@@ -133,7 +137,6 @@ struct NewRecipe: View {
                 Text("Instructions")
                     .font(.title3.bold())
                     .padding(.leading)
-                // .underline()
                     .padding(.top,5)
                     .padding(.bottom, 5)
                 
@@ -167,6 +170,13 @@ struct NewRecipe: View {
                     dismiss()
                 }
             }
+			ToolbarItemGroup(placement: .keyboard) {
+					Spacer()
+
+					Button("Done") {
+						nameFocus = false
+					}
+				}
         }
     }
         
