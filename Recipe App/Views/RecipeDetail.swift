@@ -69,13 +69,13 @@ struct RecipeDetail: View {
                         .padding(.top,5)
                         .padding(.bottom, 5)
 
-                    if let instructions = recipe.instructions {
-                        Text("\(instructions)")
-                    }
-                    else{
-                        //will be a button!
-                        Text("Add your instructions +")
-                    }
+//                    if let instructions = recipe.instructions {
+//                        Text("\(instructions)")
+//                    }
+//                    else{
+//                        //will be a button!
+//                        Text("Add your instructions +")
+//                    }
                     Spacer()
                     
                     

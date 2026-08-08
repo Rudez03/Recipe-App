@@ -161,15 +161,23 @@ struct NewRecipe: View {
                     .padding(.top,5)
                     .padding(.bottom, 5)
                 
-                if let instructions = recipe.instructions {
-                    Text("\(instructions)")
-                        .padding(.leading)
-                }
-                else{
-                    // TODO: will be a button!
-                    Text("Add your instructions +")
-                        .padding(.leading)
-                }
+					
+					TextField("Add Instructions ", text: $recipe.instructions, axis: .vertical )
+						.focused($isFocused)
+						.font(.body)
+						.multilineTextAlignment(.leading)
+						.padding(.bottom, 20)
+						.padding(.leading)
+						.padding(.trailing,10)
+						.submitLabel(.done)
+						.onChange(of: recipe.instructions) { oldValue, newValue in
+							guard isFocused else { return }
+							guard newValue.last == "\n" else { return }
+							
+							recipe.instructions.removeLast()
+							isFocused = false
+						}
+				.foregroundStyle(.gray)
                 Spacer()
             }
             

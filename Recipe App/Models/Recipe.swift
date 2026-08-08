@@ -21,7 +21,7 @@ struct Recipe: Identifiable {
     var servings: Int?
     var icon: String?
     // make a list of strings I think....
-    var instructions: String?
+    var instructions: String = ""
     
     // MARK: - Computed Properties
     var displayTime: String {

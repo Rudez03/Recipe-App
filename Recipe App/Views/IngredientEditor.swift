@@ -26,6 +26,7 @@ struct IngredientEditor: View {
 		case amount
 	}
 	@FocusState private var focusedField: Field?
+	@FocusState private var isFocused: Bool
 	
 	
 	
@@ -86,9 +87,6 @@ struct IngredientEditor: View {
                                 }
                             }
 						}
-						
-						
-						
 					}
 					//.frame(width: 150 )
 					Spacer()
@@ -106,6 +104,15 @@ struct IngredientEditor: View {
 					.padding(.bottom, 20)
 					.padding(.leading,20)
 					.padding(.trailing,10)
+					.focused($isFocused)
+					.submitLabel(.done)
+					.onChange(of: ingredient.notes) { oldValue, newValue in
+						guard isFocused else { return }
+						guard newValue.last == "\n" else { return }
+
+						ingredient.notes.removeLast()
+						isFocused = false
+					}
 			}
         }
         .navigationBarTitle("Editor Screen")
