@@ -96,7 +96,7 @@ struct NewRecipe: View {
                 
                 
                 // MARK: - Description
-                TextField("Add Desciption", text: $recipe.description, axis: .vertical)
+                TextField("Add Description", text: $recipe.description, axis: .vertical)
 					.focused($isFocused)
                     .lineLimit(2...4)
                     .font(.body)

@@ -43,7 +43,7 @@ struct RecipeCard: View {
     let recipe = Recipe(name: "Cookies",
                         description: "Soft and chewy",
                         ingredients: [],
-                        prepTime: "20 min"
+                        totalMins: 20
     )
     
 	return RecipeCard(recipe: recipe)
