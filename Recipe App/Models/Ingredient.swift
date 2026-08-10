@@ -6,8 +6,9 @@
 //
 
 import Foundation
+import SwiftData
 
-enum IngredientUnit: CaseIterable {
+nonisolated enum IngredientUnit: CaseIterable {
 	case none
     case cups
     case grams
@@ -47,17 +48,26 @@ enum IngredientUnit: CaseIterable {
 	}
 }
 
+@Model
+class Ingredient: Identifiable {
 
-struct Ingredient: Identifiable {
-    let id: UUID = UUID()
+	//MARK: - Identity
+    var id: UUID = UUID()
     
+	// MARK: - Ingredient data
     var name: String
-    var amount: String = ""
-    var unit: IngredientUnit = .none
-    var notes: String = ""
+    var amount: String
+    var unit: IngredientUnit
+    var notes: String
     
+	init(name: String, amount: String = "", unit: IngredientUnit = IngredientUnit.none, notes: String = "") {
+		self.name = name
+		self.amount = amount
+		self.unit = unit
+		self.notes = notes
+	}
     
-    // checks for notes
+    //MARK: - checks for notes
     var hasNotes: Bool {
         notes != ""
     }
