@@ -91,7 +91,7 @@ struct RecipeDetail: View {
     NavigationStack {
         RecipeDetail(recipe: Recipe(
             name: "Roasted Garlic Parmesan Chicken Alfredo with Sun-Dried Tomatoes and Fresh Basil",
-            description: "A rich and creamy homemade Alfredo tossed with grilled chicken, roasted garlic, sun-dried tomatoes, fresh basil, and parmesan cheese. Perfect for testing long text wrapping and overall layout spacing within the recipe detail screen.",
+            descrip: "A rich and creamy homemade Alfredo tossed with grilled chicken, roasted garlic, sun-dried tomatoes, fresh basil, and parmesan cheese. Perfect for testing long text wrapping and overall layout spacing within the recipe detail screen.",
             ingredients: [
 
                 Ingredient(

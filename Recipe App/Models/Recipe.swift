@@ -17,7 +17,10 @@ class Recipe: Identifiable {
     // MARK: - Reicpe Data
 	var name: String
 	var descrip: String
+    
+    @Relationship(deleteRule: .cascade, inverse: \Ingredient.recipe)
     var ingredients: [Ingredient]
+    
 	var prepTime: String
     var totalMins: Int
     var servings: Int?

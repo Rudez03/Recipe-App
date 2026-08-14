@@ -41,10 +41,10 @@ struct RecipeCard: View {
 
 #Preview {
     let recipe = Recipe(name: "Cookies",
-                        description: "Soft and chewy",
+                        descrip: "Soft and chewy",
                         ingredients: [],
                         totalMins: 20
     )
     
-	return RecipeCard(recipe: recipe)
+	 RecipeCard(recipe: recipe)
 }

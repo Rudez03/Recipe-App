@@ -36,6 +36,13 @@ struct IngredientRow: View {
     }
 }
 
-//#Preview {
-//    IngredientRow()
-//}
+#Preview {
+    let ingredient = Ingredient(
+        name: "Flour",
+        amount: "2",
+        unit: .cups,
+        notes: "Sifted"
+    )
+
+    IngredientRow(ingredient: ingredient)
+}

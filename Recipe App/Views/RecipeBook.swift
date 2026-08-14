@@ -176,7 +176,7 @@ struct RecipeBook: View {
                     ContentUnavailableView(
                         "No Recipes Yet",
                         systemImage: "book.closed",
-                        recipe.descrip: "Your saved recipes will appear here."
+                        description: Text("Your saved recipes will appear here.")
                     )
                 } else if recipesShown.isEmpty{
                     ContentUnavailableView.search
