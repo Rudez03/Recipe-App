@@ -43,7 +43,7 @@ struct RecipeDetail: View {
                     .padding(.bottom)
                     
                     // MARK: - Description
-                    Text(recipe.description)
+                    Text(recipe.descrip)
                         .font(.body)
                         //.frame(maxWidth: .infinity)
                         .multilineTextAlignment(.center)

@@ -8,7 +8,7 @@
 import Foundation
 import SwiftData
 
-nonisolated enum IngredientUnit: CaseIterable {
+nonisolated enum IngredientUnit: CaseIterable, Codable {
 	case none
     case cups
     case grams

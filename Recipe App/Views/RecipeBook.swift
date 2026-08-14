@@ -13,31 +13,31 @@ struct RecipeBook: View {
     
     @State private var recipes: [Recipe] = [
         Recipe(name: "Cookies",
-                       description: "Soft and chewy",
+                       descrip: "Soft and chewy",
                        ingredients: [],
                        totalMins: 20
                 ),
         
                 Recipe(name: "Concha Cupcakes",
-                       description: "Sweet and cute",
+                       descrip: "Sweet and cute",
                        ingredients: [],
                        totalMins: 45
                 ),
         
                 Recipe(name: "Strawberry Cheesecake",
-                       description: "Refreshing and Sweet",
+                       descrip: "Refreshing and Sweet",
                        ingredients: [],
                        totalMins: 15
                 ),
         
                 Recipe(name: "Churro Cheesecake",
-                       description: "Warm yet nastolgic",
+                       descrip: "Warm yet nastolgic",
                        ingredients: [],
 					   totalMins: 90
                 ),
         Recipe(
                    name: "Roasted Garlic Parmesan Chicken Alfredo with Sun-Dried Tomatoes and Fresh Basil",
-                   description: "A rich and creamy homemade Alfredo tossed with grilled chicken, roasted garlic, sun-dried tomatoes, fresh basil, and parmesan cheese. Perfect for testing long text wrapping and overall layout spacing within the recipe detail screen.",
+                   descrip: "A rich and creamy homemade Alfredo tossed with grilled chicken, roasted garlic, sun-dried tomatoes, fresh basil, and parmesan cheese. Perfect for testing long text wrapping and overall layout spacing within the recipe detail screen.",
                    ingredients: [
        
                         Ingredient(
@@ -176,7 +176,7 @@ struct RecipeBook: View {
                     ContentUnavailableView(
                         "No Recipes Yet",
                         systemImage: "book.closed",
-                        description: Text("Your saved recipes will appear here.")
+                        recipe.descrip: "Your saved recipes will appear here."
                     )
                 } else if recipesShown.isEmpty{
                     ContentUnavailableView.search

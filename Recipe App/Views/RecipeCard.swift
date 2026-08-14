@@ -23,7 +23,7 @@ struct RecipeCard: View {
                 Text(recipe.displayTime)
 			}
             
-			Text(recipe.description)
+			Text(recipe.descrip)
                 .multilineTextAlignment(.center)
 		}
         .padding()

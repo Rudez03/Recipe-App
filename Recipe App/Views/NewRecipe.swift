@@ -96,7 +96,7 @@ struct NewRecipe: View {
                 
                 
                 // MARK: - Description
-                TextField("Add Description", text: $recipe.description, axis: .vertical)
+                TextField("Add Description", text: $recipe.descrip, axis: .vertical)
 					.focused($isFocused)
                     .lineLimit(2...4)
                     .font(.body)
@@ -105,11 +105,11 @@ struct NewRecipe: View {
                     .padding(.leading)
 					.padding(.trailing,10)
 					.submitLabel(.done)
-					.onChange(of: recipe.description) { oldValue, newValue in
+					.onChange(of: recipe.descrip) { oldValue, newValue in
 						guard isFocused else { return }
 						guard newValue.last == "\n" else { return }
 
-						recipe.description.removeLast()
+						recipe.descrip.removeLast()
 						isFocused = false
 					}
 					
