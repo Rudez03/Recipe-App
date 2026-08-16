@@ -237,4 +237,10 @@ struct RecipeBook: View {
 
 #Preview {
         RecipeBook()
+        .modelContainer(SampleData.shared.modelContainer)
+}
+
+#Preview("Empty Book") {
+    RecipeBook()
+        .modelContainer(for: [Recipe.self, Ingredient.self], inMemory: true)
 }
