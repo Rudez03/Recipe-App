@@ -11,28 +11,27 @@ A user can save a recipe, completely close the app, reopen it, and still find an
 - Handle sample recipes without duplicates
 - Test and polish recipe persistence
 
-## Lessons Learned 
-- I learned how Swift Data is called upon 
-- Learned how to build the container for a Swift data model
-- 2 models can have a relationship for swift data with one almost like bieng the parent
-- learned how to create sample data and preview the sample and any other state in said file. 
+## Lessons Learned
+- I learned how views access SwiftData through the model container, model context, and queries.
+- Learned how to build the container for a SwiftData model.
+- Two models can have a relationship in SwiftData, with one almost like being the parent.
+- Learned how to create sample data and preview both populated and empty states.
 - Implementing classes and understanding them.
+- SwiftData models use classes so SwiftData can track the identity and changes of the same object.
 
 ## Decisions Made
-- delete should be handled next rather than edit
-- classes rather than structs for swift data.
-- sort is not needed at the moment for functionality
+- Delete should be handled next rather than edit.
+- Sort is not needed at the moment for functionality.
 
-## Moved to Future 
+## Moved to Future
 - Edit option moved to Sprint 4/5
 - Difficulty enum
-- Tap gesture for exiting keyboard
+- Tap gesture for exiting the keyboard
 - Polishing the keyboard display for most items
 
 ## Next Sprint
 - Delete
-- being able to remove a recipe from the swift data container/memory 
+- Being able to remove a recipe from the SwiftData container/memory
 
-## Reflection 
-- This was not as long as Sprint 2, but it was still very important! I learned that in order to create a flow of swift data we need classes not structs, duw to the fact structs are like making copies and classes are more like references to the actual object.I learned after some test cases that a delete is pobably needed before edit. Reasoning beinging. im running test cases on my phone and its saving each case since its doing exactly what it is supposed to do. the issue is that for better testing and flow I should be able to do quick delete on them so I can retry cases...
-
+## Reflection
+This was not as long as Sprint 2, but it was still very important! I learned that in order to create a flow of SwiftData, we need classes rather than structs because structs are like making copies and classes are more like references to the actual object. I learned after running some test cases that delete is probably needed before edit. I was running test cases on my phone, and it saved each case because it was doing exactly what it was supposed to do. The issue is that for better testing and flow, I should be able to quickly delete them so I can retry cases.
