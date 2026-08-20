@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct RecipeDetail: View {
+	@State private var isEdit = false
     let recipe: Recipe
     
     var body: some View {
@@ -83,6 +84,27 @@ struct RecipeDetail: View {
         .padding()
         //.navigationTitle(recipe.name)
         .navigationBarTitleDisplayMode(.inline)
+		
+		// MARK: Edit
+		.toolbar {
+			ToolbarItem {
+				Button(action: {
+					isEdit.toggle()
+				}) {
+					HStack{
+						Text("Edit")
+					}
+					// .foregroundStyle(.black)
+				}
+				.fullScreenCover(isPresented: $isEdit) {
+				} content: {
+					NavigationStack {
+						EditRecipe()
+					}
+				}
+			}
+			
+		}
 
     }
 }
