@@ -11,7 +11,10 @@ import SwiftData
 struct EditRecipe: View {
 	@State private var showAlert: Bool = false
 	@Environment(\.dismiss) private var dismiss
+    @Environment(\.modelContext) private var modelContext
+    
     let recipe: Recipe
+    var onDelete: () -> Void
 	
 	
     var body: some View {
@@ -26,6 +29,8 @@ struct EditRecipe: View {
                 .padding(.trailing)
             
             Spacer()
+            
+            // MARK: - Delete action
 			Button(role: .destructive, action: {
 				showAlert.toggle()
 
@@ -41,7 +46,8 @@ struct EditRecipe: View {
 			}
 			.confirmationDialog("Are you sure?", isPresented: $showAlert, titleVisibility: .visible) {
 				Button("yes, delete", role: .destructive){
-					
+                    modelContext.delete(recipe)
+                    onDelete()
 				}
 				
 				Button("Cancel", role: .cancel){
@@ -50,6 +56,7 @@ struct EditRecipe: View {
 			}
 
 		}
+        //MARK: - Save/Cancel actions
 		.toolbar {
 			ToolbarItem(placement: .confirmationAction) {
 				Button("Save"){
@@ -68,7 +75,9 @@ struct EditRecipe: View {
 
 #Preview {
 	NavigationStack{
-        EditRecipe(recipe: SampleData.shared.sampleRecipe)
+        EditRecipe(recipe: SampleData.shared.sampleRecipe){
+            
+        }
             .modelContainer(SampleData.shared.modelContainer)
 	}
 }

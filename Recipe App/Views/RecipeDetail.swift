@@ -9,6 +9,8 @@ import SwiftUI
 
 struct RecipeDetail: View {
 	@State private var isEdit = false
+    @Environment(\.dismiss) private var dismiss
+    
     let recipe: Recipe
     
     var body: some View {
@@ -99,7 +101,9 @@ struct RecipeDetail: View {
 				.fullScreenCover(isPresented: $isEdit) {
 				} content: {
 					NavigationStack {
-                        EditRecipe(recipe: recipe)
+                        EditRecipe(recipe: recipe){
+                            dismiss()
+                        }
 					}
 				}
 			}

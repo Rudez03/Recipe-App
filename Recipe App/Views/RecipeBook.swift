@@ -16,11 +16,13 @@ struct RecipeBook: View {
 	
 	@Environment(\.modelContext) private var modelContext
 	
+    // MARK: - Columns def
     let columns = [
         GridItem(.flexible()),
         GridItem(.flexible())
     ]
     
+    // MARK: - Recipe filter
     var recipesShown: [Recipe]  {
         if searchText.isEmpty {
             return recipes
@@ -35,6 +37,7 @@ struct RecipeBook: View {
     var body: some View {
         NavigationStack {
             Group {
+                // Empty State
                 if recipes.isEmpty {
                     ContentUnavailableView(
                         "No Recipes Yet",
@@ -65,6 +68,7 @@ struct RecipeBook: View {
             }
             .navigationTitle("Recipe Book")
             .searchable(text: $searchText, placement: .navigationBarDrawer)
+            // MARK: - Toolbar
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button(action: {
@@ -85,7 +89,6 @@ struct RecipeBook: View {
                     }
                 }
             }
-            
             
         }
      
