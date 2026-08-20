@@ -99,7 +99,7 @@ struct RecipeDetail: View {
 				.fullScreenCover(isPresented: $isEdit) {
 				} content: {
 					NavigationStack {
-						EditRecipe()
+                        EditRecipe(recipe: recipe)
 					}
 				}
 			}

@@ -161,6 +161,10 @@ class SampleData {
             ]
     }
     
+    var sampleRecipe: Recipe {
+        sampleRecipes[4]
+    }
+    
     private init() {
         let schema = Schema([ Recipe.self, Ingredient.self])
         

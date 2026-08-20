@@ -6,14 +6,26 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct EditRecipe: View {
 	@State private var showAlert: Bool = false
 	@Environment(\.dismiss) private var dismiss
+    let recipe: Recipe
 	
 	
     var body: some View {
 		VStack {
+            Text(recipe.name)
+                .font(.title)
+                .padding(.bottom)
+                .fontWeight(.semibold)
+            
+            Text(recipe.descrip)
+                .padding(.leading)
+                .padding(.trailing)
+            
+            Spacer()
 			Button(role: .destructive, action: {
 				showAlert.toggle()
 
@@ -56,6 +68,7 @@ struct EditRecipe: View {
 
 #Preview {
 	NavigationStack{
-		EditRecipe()
+        EditRecipe(recipe: SampleData.shared.sampleRecipe)
+            .modelContainer(SampleData.shared.modelContainer)
 	}
 }
