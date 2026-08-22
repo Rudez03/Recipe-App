@@ -47,7 +47,7 @@ struct EditRecipe: View {
                     
                     // MARK: hrs
                     Image(systemName: "clock")
-                        //.padding(.leading)
+                        .padding(.trailing, -5)
                     
                     Picker("Hours", selection: $draft.hours) {
                         ForEach(0...24, id: \.self) { hr in
@@ -65,14 +65,16 @@ struct EditRecipe: View {
                                 .tag(min)
                         }
                     }
+                    
                     .pickerStyle(.menu)
                     .fixedSize(horizontal: true, vertical: false)
-                    .padding(.trailing)
+                    
                     
                     Spacer()
                     
                     // MARK: - Servings
                     Image(systemName: "person.crop.circle")
+                        .padding(.trailing, -5)
                     Picker("serving size", selection: $draft.servings) {
                         Text("Not Set")
                             .tag(nil as Int?)
@@ -83,6 +85,7 @@ struct EditRecipe: View {
                             
                         }
                     }
+                    .padding(.trailing, -14)
                     
                 }
                 .pickerStyle(.menu)
@@ -99,8 +102,30 @@ struct EditRecipe: View {
                         isFocused = false
                     }
                 
-               
+                Spacer()
                 
+                // MARK: - Instructions
+                Text("Instructions")
+                    .font(.title3.bold())
+                    
+                    .padding(.top,5)
+                    .padding(.bottom, 5)
+                
+                    
+                    TextField("Add Instructions ", text: $draft.instructions, axis: .vertical )
+                        .focused($isFocused)
+                        .font(.body)
+                        .multilineTextAlignment(.leading)
+                        .padding(.bottom, 20)
+                        .submitLabel(.done)
+                        .onChange(of: draft.instructions) { oldValue, newValue in
+                            guard isFocused else { return }
+                            guard newValue.last == "\n" else { return }
+                            
+                            draft.instructions.removeLast()
+                            isFocused = false
+                        }
+                .foregroundStyle(.gray)
                 Spacer()
                 
                 // MARK: - Delete action
@@ -129,8 +154,9 @@ struct EditRecipe: View {
                 }
                 
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
+       
         .padding()
         .navigationBarTitleDisplayMode(.inline)
         //MARK: - Save/Cancel actions
