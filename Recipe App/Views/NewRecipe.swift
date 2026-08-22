@@ -32,7 +32,7 @@ struct NewRecipe: View {
             VStack(alignment: .leading) {
                 
                 // MARK: - Header
-                TextField("Recipe Name", text: $recipe.name)
+                TextField("Recipe Name", text: $recipe.name, axis: .vertical)
 					.focused($isFocused)
                     .font(.title)
                     .fontWeight(.semibold)

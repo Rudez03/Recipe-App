@@ -212,6 +212,8 @@ struct RecipeDetail: View {
                 )
             ],
             
+            totalMins: 105,
+            
             instructions: """
             1. Bring a large pot of generously salted water to a boil.
 
