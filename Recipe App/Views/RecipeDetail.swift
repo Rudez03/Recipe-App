@@ -83,7 +83,7 @@ struct RecipeDetail: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             
-        .padding()
+            .padding()
         //.navigationTitle(recipe.name)
         .navigationBarTitleDisplayMode(.inline)
 		

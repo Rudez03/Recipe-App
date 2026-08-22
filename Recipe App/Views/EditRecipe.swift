@@ -30,8 +30,7 @@ struct EditRecipe: View {
 	
     var body: some View {
         ScrollView{
-            VStack{
-                
+            VStack(alignment: .leading){
                 // MARK: - Name
                 TextField("Recipe Name", text: $draft.name, axis: .vertical)
                     .font(.title)
@@ -44,22 +43,11 @@ struct EditRecipe: View {
                         isFocused = false
                     }
                 
-                // MARK: - Description
-                TextField("Add Descripton", text: $draft.descrip, axis: .vertical)
-                    .font(.body)
-                    .multilineTextAlignment(.center)
-                    .padding(.bottom, 30)
-                    .focused($isFocused)
-                    .submitLabel(.done)
-                    .onSubmit {
-                        isFocused = false
-                    }
-                
                 HStack{
                     
                     // MARK: hrs
                     Image(systemName: "clock")
-                       // .padding(.leading)
+                        //.padding(.leading)
                     
                     Picker("Hours", selection: $draft.hours) {
                         ForEach(0...24, id: \.self) { hr in
@@ -79,6 +67,7 @@ struct EditRecipe: View {
                     }
                     .pickerStyle(.menu)
                     .fixedSize(horizontal: true, vertical: false)
+                    .padding(.trailing)
                     
                     Spacer()
                     
@@ -98,6 +87,19 @@ struct EditRecipe: View {
                 }
                 .pickerStyle(.menu)
                 .padding(.bottom)
+                
+                // MARK: - Description
+                TextField("Add Descripton", text: $draft.descrip, axis: .vertical)
+                    .font(.body)
+                    .multilineTextAlignment(.center)
+                    .padding(.bottom, 30)
+                    .focused($isFocused)
+                    .submitLabel(.done)
+                    .onSubmit {
+                        isFocused = false
+                    }
+                
+               
                 
                 Spacer()
                 
@@ -127,10 +129,9 @@ struct EditRecipe: View {
                 }
                 
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding()
         }
         .frame(maxWidth: .infinity, alignment: .leading)
+        .padding()
         .navigationBarTitleDisplayMode(.inline)
         //MARK: - Save/Cancel actions
 		.toolbar {
