@@ -133,7 +133,7 @@ struct EditRecipe: View {
                     showAlert.toggle()
                     
                 }) {
-                    Text("Delete Reicpe")
+                    Text("Delete Recipe")
                     //.font(.title2)
                         .padding()
                         .overlay {
@@ -163,9 +163,19 @@ struct EditRecipe: View {
 		.toolbar {
 			ToolbarItem(placement: .confirmationAction) {
 				Button("Save"){
+                    recipe.name = draft.name
+                    recipe.totalMins = (draft.hours * 60) + draft.mins
+                    recipe.servings = draft.servings
+                    recipe.instructions = draft.instructions
 					dismiss()
 				}
 			}
+            ToolbarItem(placement: .cancellationAction) {
+                Button("Cancel"){
+                    dismiss()
+                }
+            }
+
 		}
     }
 	
