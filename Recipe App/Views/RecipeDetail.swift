@@ -61,7 +61,8 @@ struct RecipeDetail: View {
                     
                     
                     ForEach(recipe.ingredients) { ingredient in
-                        IngredientRow(ingredient: ingredient)
+                        IngredientRow(displayText: ingredient.displayText,
+                                      notes: ingredient.notes)
                     }
                     
                     

@@ -112,6 +112,17 @@ struct EditRecipe: View {
                 
                 Spacer()
                 
+                Text("Ingredients")
+                    .font(.title3.bold())
+                    //.underline()
+                    .padding(.bottom, 5)
+                
+                
+                ForEach(draft.ingredients) { ingredient in
+                    IngredientRow(displayText: ingredient.displayText,
+                                  notes: ingredient.notes)
+                }
+                
                 // MARK: - Instructions
                 Text("Instructions")
                     .font(.title3.bold())

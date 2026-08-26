@@ -9,19 +9,20 @@ import SwiftUI
 
 struct IngredientRow: View {
     
-    let ingredient: Ingredient
+    let displayText: String
+    let notes: String
     
     
     var body: some View {
         HStack(alignment: .firstTextBaseline) {
-            Image(systemName: "circle.fill ")
-                .font(.caption)
+            Image(systemName: "circle.fill")
+                .font(.caption2)
                 .offset(y: -1)
             VStack(alignment: .leading, spacing: 1){
-                Text(ingredient.displayText)
+                Text(displayText)
                 
-                if ingredient.notes != "" {
-					Text(ingredient.notes)
+                if notes != "" {
+					Text(notes)
                         .foregroundColor(.secondary)
                         .italic()
                         .font(.subheadline)
@@ -44,5 +45,6 @@ struct IngredientRow: View {
         notes: "Sifted"
     )
 
-    IngredientRow(ingredient: ingredient)
+    IngredientRow(displayText: ingredient.displayText,
+                  notes: ingredient.notes)
 }

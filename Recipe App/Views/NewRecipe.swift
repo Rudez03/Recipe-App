@@ -127,7 +127,8 @@ struct NewRecipe: View {
                     .padding(.bottom, 5)
 				
                 ForEach(recipe.ingredients) { ingredient in
-                    IngredientRow(ingredient: ingredient)
+                    IngredientRow(displayText: ingredient.displayText,
+                                  notes: ingredient.notes)
                 }
 				.padding(.leading)
 				
