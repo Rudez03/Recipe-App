@@ -24,9 +24,13 @@ struct DraftIngredient: Identifiable {
         self.notes = ingredient.notes
     }
     
-    var hasNotes: Bool {
-        notes != ""
-    }
+	init(name: String = "") {
+		self.id = UUID()
+		self.name = name
+		self.amount = ""
+		self.unit = .none
+		self.notes = ""
+	}
     
     var displayText: String {
         if amount.isEmpty != true  {

@@ -13,6 +13,11 @@ struct EditRecipe: View {
 	@Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
     @State private var draft: DraftRecipe
+	
+	// Ingredient edit sheet
+	@State private var isShowingIngredient = false
+	
+	@State private var selectedIngredient: DraftIngredient?
     
     // MARK: - Keyboard
     @FocusState private var isFocused: Bool
@@ -111,7 +116,7 @@ struct EditRecipe: View {
                     }
                 
                 Spacer()
-                
+                // MARK: - Ingredients
                 Text("Ingredients")
                     .font(.title3.bold())
                     //.underline()
@@ -119,9 +124,50 @@ struct EditRecipe: View {
                 
                 
                 ForEach(draft.ingredients) { ingredient in
-                    IngredientRow(displayText: ingredient.displayText,
-                                  notes: ingredient.notes)
+					Button {
+						selectedIngredient = ingredient
+					} label: {
+						IngredientRow(
+							displayText: ingredient.displayText,
+							notes: ingredient.notes
+						)
+					}
+					.buttonStyle(.plain)
                 }
+				.sheet(item: $selectedIngredient) { selected in
+					NavigationStack{
+						IngredientEditor(draftIngredient: selected, onSave: {updatedDraft in
+							if let index = draft.ingredients.firstIndex(where: { ingredient in
+								ingredient.id == updatedDraft.id
+							}) {
+								draft.ingredients[index] = updatedDraft
+							}
+						})
+						.presentationDetents([.medium])
+					}
+				}
+
+				// Add Ingredient Button
+				Button(action: {
+					isShowingIngredient.toggle()
+				}) {
+					HStack{
+						Image(systemName: "plus.circle")
+							.font(.caption)
+							.offset(y: 0.2)
+						Text("Add Ingredient")
+					}
+					.foregroundStyle(.gray)
+				}
+				.sheet(isPresented: $isShowingIngredient) {
+				} content: {
+					NavigationStack{
+						IngredientEditor{ savedDraft in
+							draft.ingredients.append(savedDraft)
+						}
+							.presentationDetents([.medium])
+					}
+				}
                 
                 // MARK: - Instructions
                 Text("Instructions")

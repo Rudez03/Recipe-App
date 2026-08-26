@@ -8,17 +8,27 @@
 import SwiftUI
 
 struct IngredientEditor: View {
-    @State private var ingredient = Ingredient(name:"")
+	@State private var draft: DraftIngredient
     @Environment(\.dismiss) private var dismiss
     
+	init(draftIngredient: DraftIngredient = DraftIngredient(), onSave: @escaping (DraftIngredient) -> Void, onDelete: (()-> Void)? = nil) {
+		_draft = State(initialValue: draftIngredient)
+		self.onSave = onSave
+		self.onDelete = onDelete
+	}
+
 	
 	//MARK: - Saving function/validation
-    var onSave: (Ingredient) -> Void
+    var onSave: (DraftIngredient) -> Void
+	
 	private var canSave: Bool {
-		!ingredient.name
+		!draft.name
 			.trimmingCharacters(in: .whitespacesAndNewlines)
 			.isEmpty
 	}
+	
+	// MARK: - Delete function/validation
+	var onDelete: (() -> Void)?
 	
 	//MARK: - Keyboard Focus cases
 	enum Field {
@@ -41,7 +51,7 @@ struct IngredientEditor: View {
 						.frame(height: 50)
 						.padding(.leading)
 						.padding(.trailing)
-					TextField("Ingredient Name", text: $ingredient.name)
+					TextField("Ingredient Name", text: $draft.name)
 						.font(.title)
 						.padding(.leading, 40)
 						.focused($focusedField, equals: .name)
@@ -54,7 +64,7 @@ struct IngredientEditor: View {
 				.padding(.bottom, 5)
 				
 				
-				//MARK: - Amount/Unit
+				// MARK: - Amount/Unit
 				HStack{
 					ZStack{
 						Capsule()
@@ -64,7 +74,7 @@ struct IngredientEditor: View {
 							
 						HStack{
 							// Amount
-							TextField("0", text: $ingredient.amount)
+							TextField("0", text: $draft.amount)
 								.font(.title3)
 								.frame(width: 60)
 								.focused($focusedField, equals: .amount)
@@ -78,7 +88,7 @@ struct IngredientEditor: View {
 								.frame(width: 50)
 							
 							// Unit picker
-                            Picker("Unit", selection: $ingredient.unit) {
+                            Picker("Unit", selection: $draft.unit) {
                                 ForEach(IngredientUnit.allCases, id: \.self) { unit in
 									Text(unit.displayName)
 										.tag(unit)
@@ -97,7 +107,7 @@ struct IngredientEditor: View {
 				
 				
 				// MARK: - Notes Optional
-				TextField("Add Notes", text: $ingredient.notes, axis: .vertical)
+				TextField("Add Notes", text: $draft.notes, axis: .vertical)
 					.lineLimit(2...4)
 					.font(.body)
 					.multilineTextAlignment(.leading)
@@ -106,13 +116,29 @@ struct IngredientEditor: View {
 					.padding(.trailing,10)
 					.focused($isFocused)
 					.submitLabel(.done)
-					.onChange(of: ingredient.notes) { oldValue, newValue in
+					.onChange(of: draft.notes) { oldValue, newValue in
 						guard isFocused else { return }
 						guard newValue.last == "\n" else { return }
 
-						ingredient.notes.removeLast()
+						draft.notes.removeLast()
 						isFocused = false
 					}
+				
+				// MARK: - Delete Button
+				if let onDelete {
+					Button(role: .destructive, action: {
+						onDelete()
+						
+					}) {
+						Text("Delete")
+							.padding()
+							.overlay {
+								Capsule()
+									.stroke(.red)
+							}
+						
+					}
+				}
 			}
         }
         .navigationBarTitle("Editor Screen")
@@ -122,7 +148,7 @@ struct IngredientEditor: View {
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
                 Button("Save"){
-                    onSave(ingredient)
+                    onSave(draft)
                     dismiss()
                 }
 				.disabled(!canSave)

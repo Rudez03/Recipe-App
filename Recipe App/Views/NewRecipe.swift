@@ -15,6 +15,7 @@ struct NewRecipe: View {
 
 	// MARK: - Saving fucntion/Validation
 	var onSave: (Recipe) -> Void
+	
 	private var canSave: Bool {
 		!recipe.name
 			.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -24,6 +25,8 @@ struct NewRecipe: View {
 	// Keyboard dismissal
 	@FocusState private var isFocused: Bool
 	
+	
+	// IngredientSheet
     @State private var isShowingIngredient = false
     
     
@@ -148,10 +151,16 @@ struct NewRecipe: View {
                 .sheet(isPresented: $isShowingIngredient) {
                 } content: {
                     NavigationStack{
-                        IngredientEditor{ savedIngredient in
-                            recipe.ingredients.append(savedIngredient)
+                        IngredientEditor{ savedDraft in
+							let newIngredient = Ingredient(
+									name: savedDraft.name,
+									amount: savedDraft.amount,
+									unit: savedDraft.unit,
+									notes: savedDraft.notes
+								)
+                            recipe.ingredients.append(newIngredient)
                         }
-                            .presentationDetents([.medium, .medium])
+                            .presentationDetents([.medium])
                     }
                 }
                 
