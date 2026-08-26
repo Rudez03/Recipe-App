@@ -39,7 +39,11 @@ struct EditRecipe: View {
                     .padding(.bottom, 5)
                     .focused($isFocused)
                     .submitLabel(.done)
-                    .onSubmit {
+                    .onChange(of: draft.name) { oldValue, newValue in
+                        guard isFocused else { return }
+                        guard newValue.last == "\n" else { return }
+
+                        draft.name.removeLast()
                         isFocused = false
                     }
                 
@@ -92,13 +96,17 @@ struct EditRecipe: View {
                 .padding(.bottom)
                 
                 // MARK: - Description
-                TextField("Add Descripton", text: $draft.descrip, axis: .vertical)
+                TextField("Add Description", text: $draft.descrip, axis: .vertical)
                     .font(.body)
-                    .multilineTextAlignment(.center)
+                    .multilineTextAlignment(.leading)
                     .padding(.bottom, 30)
                     .focused($isFocused)
                     .submitLabel(.done)
-                    .onSubmit {
+                    .onChange(of: draft.descrip) { oldValue, newValue in
+                        guard isFocused else { return }
+                        guard newValue.last == "\n" else { return }
+
+                        draft.descrip.removeLast()
                         isFocused = false
                     }
                 
@@ -154,6 +162,7 @@ struct EditRecipe: View {
                 }
                 
             }
+			//.padding(.leading)
             .frame(maxWidth: .infinity, alignment: .leading)
         }
        
@@ -165,6 +174,7 @@ struct EditRecipe: View {
 				Button("Save"){
                     recipe.name = draft.name
                     recipe.totalMins = (draft.hours * 60) + draft.mins
+                    recipe.descrip = draft.descrip
                     recipe.servings = draft.servings
                     recipe.instructions = draft.instructions
 					dismiss()

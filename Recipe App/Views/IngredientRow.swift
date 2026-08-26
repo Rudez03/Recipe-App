@@ -14,7 +14,7 @@ struct IngredientRow: View {
     
     var body: some View {
         HStack(alignment: .firstTextBaseline) {
-            Image(systemName: "circle")
+            Image(systemName: "circle.fill ")
                 .font(.caption)
                 .offset(y: -1)
             VStack(alignment: .leading, spacing: 1){

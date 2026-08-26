@@ -41,9 +41,13 @@ struct NewRecipe: View {
                     .padding(.leading)
                     .padding(.trailing)
 					.submitLabel(.done)
-					.onSubmit {
-						isFocused = false
-					}
+                    .onChange(of: recipe.name) { oldValue, newValue in
+                        guard isFocused else { return }
+                        guard newValue.last == "\n" else { return }
+
+                        recipe.name.removeLast()
+                        isFocused = false
+                    }
                 
                 
                 
@@ -146,7 +150,7 @@ struct NewRecipe: View {
                         IngredientEditor{ savedIngredient in
                             recipe.ingredients.append(savedIngredient)
                         }
-                            //.presentationDetents([.medium, .large])
+                            .presentationDetents([.medium, .medium])
                     }
                 }
                 

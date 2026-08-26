@@ -49,7 +49,7 @@ struct RecipeDetail: View {
                     Text(recipe.descrip)
                         .font(.body)
                         //.frame(maxWidth: .infinity)
-                        .multilineTextAlignment(.center)
+                        .multilineTextAlignment(.leading)
                         .padding(.bottom, 30)
                     
                     
