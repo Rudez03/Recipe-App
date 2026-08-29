@@ -134,7 +134,8 @@ struct IngredientEditor: View {
 						
 					}) {
 						Text("Delete")
-							.padding()
+                            .font(.body)
+							.padding(10)
 							.overlay {
 								Capsule()
 									.stroke(.red)

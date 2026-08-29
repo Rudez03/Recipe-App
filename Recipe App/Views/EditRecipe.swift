@@ -206,14 +206,15 @@ struct EditRecipe: View {
                     
                 }) {
                     Text("Delete Recipe")
-                    //.font(.title2)
-                        .padding()
+                        .font(.body)
+                        .padding(10)
                         .overlay {
                             Capsule()
                                 .stroke(.red)
                         }
                     
                 }
+                .frame(maxWidth: .infinity, alignment: .center)
                 .confirmationDialog("Are you sure?", isPresented: $showAlert, titleVisibility: .visible) {
                     Button("yes, delete", role: .destructive){
                         modelContext.delete(recipe)
