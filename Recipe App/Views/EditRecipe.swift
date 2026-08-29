@@ -43,11 +43,10 @@ struct EditRecipe: View {
                     .padding(.bottom, 5)
                     .focused($isFocused)
                     .submitLabel(.done)
-                    .onChange(of: draft.name) { oldValue, newValue in
-                        guard isFocused else { return }
-                        guard newValue.last == "\n" else { return }
-
-                        draft.name.removeLast()
+                    .onChange(of: draft.name) { _, newValue in
+                        guard newValue.contains("\n") else {return}
+                        
+                        draft.name = newValue.replacingOccurrences(of: "\n", with: "")
                         isFocused = false
                     }
                 

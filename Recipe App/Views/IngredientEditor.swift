@@ -8,11 +8,11 @@
 import SwiftUI
 
 struct IngredientEditor: View {
-	@State private var draft: DraftIngredient
+	@State private var draftIngredient: DraftIngredient
     @Environment(\.dismiss) private var dismiss
     
 	init(draftIngredient: DraftIngredient = DraftIngredient(), onSave: @escaping (DraftIngredient) -> Void, onDelete: (()-> Void)? = nil) {
-		_draft = State(initialValue: draftIngredient)
+		_draftIngredient = State(initialValue: draftIngredient)
 		self.onSave = onSave
 		self.onDelete = onDelete
 	}
@@ -22,7 +22,7 @@ struct IngredientEditor: View {
     var onSave: (DraftIngredient) -> Void
 	
 	private var canSave: Bool {
-		!draft.name
+		!draftIngredient.name
 			.trimmingCharacters(in: .whitespacesAndNewlines)
 			.isEmpty
 	}
@@ -44,27 +44,7 @@ struct IngredientEditor: View {
     var body: some View {
         ScrollView {
 			VStack {
-//				ZStack {
-//					// MARK: - Ingredient Name
-//					Capsule()
-//						.fill(Color.gray.opacity(0.2))
-//						.frame(height: 50)
-//						.padding(.leading)
-//						.padding(.trailing)
-//					TextField("Ingredient Name", text: $draft.name)
-//						.font(.title)
-//						.padding(.leading, 40)
-//                       .padding(.trailing, 40)
-//						.focused($focusedField, equals: .name)
-//						.submitLabel(.next)
-//						.onSubmit {
-//							focusedField = .amount
-//						}
-//				}
-//				.padding(.top,25)
-//				.padding(.bottom, 5)
-                
-                TextField("Ingredient Name", text: $draft.name, axis: .vertical)
+                TextField("Ingredient Name", text: $draftIngredient.name, axis: .vertical)
                     .font(.title)
                     .padding(.horizontal, 30)
                         .padding(.vertical, 5)
@@ -75,10 +55,10 @@ struct IngredientEditor: View {
                         .padding(.horizontal) // outside screen margin
                     .focused($focusedField, equals: .name)
                     .submitLabel(.next)
-                    .onChange(of: draft.name) { _, newValue in
+                    .onChange(of: draftIngredient.name) { _, newValue in
                         guard newValue.contains("\n") else {return}
                         
-                        draft.name = newValue.replacingOccurrences(of: "\n", with: "")
+                        draftIngredient.name = newValue.replacingOccurrences(of: "\n", with: "")
                         focusedField = .amount
                     }
                 
@@ -96,7 +76,7 @@ struct IngredientEditor: View {
 							
 						HStack{
 							// Amount
-							TextField("0", text: $draft.amount)
+							TextField("0", text: $draftIngredient.amount)
 								.font(.title3)
 								.frame(width: 60)
 								.focused($focusedField, equals: .amount)
@@ -110,7 +90,7 @@ struct IngredientEditor: View {
 								.frame(width: 50)
 							
 							// Unit picker
-                            Picker("Unit", selection: $draft.unit) {
+                            Picker("Unit", selection: $draftIngredient.unit) {
                                 ForEach(IngredientUnit.allCases, id: \.self) { unit in
 									Text(unit.displayName)
 										.tag(unit)
@@ -129,7 +109,7 @@ struct IngredientEditor: View {
 				
 				
 				// MARK: - Notes Optional
-				TextField("Add Notes", text: $draft.notes, axis: .vertical)
+				TextField("Add Notes", text: $draftIngredient.notes, axis: .vertical)
 					.lineLimit(2...4)
 					.font(.body)
 					.multilineTextAlignment(.leading)
@@ -138,11 +118,11 @@ struct IngredientEditor: View {
 					.padding(.trailing,10)
 					.focused($isFocused)
 					.submitLabel(.done)
-					.onChange(of: draft.notes) { oldValue, newValue in
+					.onChange(of: draftIngredient.notes) { oldValue, newValue in
 						guard isFocused else { return }
 						guard newValue.last == "\n" else { return }
 
-						draft.notes.removeLast()
+						draftIngredient.notes.removeLast()
 						isFocused = false
 					}
 				
@@ -171,7 +151,7 @@ struct IngredientEditor: View {
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
                 Button("Save"){
-                    onSave(draft)
+                    onSave(draftIngredient)
                     dismiss()
                 }
 				.disabled(!canSave)

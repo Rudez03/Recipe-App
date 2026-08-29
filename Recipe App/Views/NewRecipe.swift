@@ -44,11 +44,10 @@ struct NewRecipe: View {
                     .padding(.leading)
                     .padding(.trailing)
 					.submitLabel(.done)
-                    .onChange(of: recipe.name) { oldValue, newValue in
-                        guard isFocused else { return }
-                        guard newValue.last == "\n" else { return }
-
-                        recipe.name.removeLast()
+                    .onChange(of: recipe.name) { _, newValue in
+                        guard newValue.contains("\n") else {return}
+                        
+                        recipe.name = newValue.replacingOccurrences(of: "\n", with: "")
                         isFocused = false
                     }
                 
