@@ -44,24 +44,46 @@ struct IngredientEditor: View {
     var body: some View {
         ScrollView {
 			VStack {
-				ZStack {
-					// MARK: - Ingredient Name
-					Capsule()
-						.fill(Color.gray.opacity(0.2))
-						.frame(height: 50)
-						.padding(.leading)
-						.padding(.trailing)
-					TextField("Ingredient Name", text: $draft.name)
-						.font(.title)
-						.padding(.leading, 40)
-						.focused($focusedField, equals: .name)
-						.submitLabel(.next)
-						.onSubmit {
-							focusedField = .amount
-						}
-				}
-				.padding(.top,25)
-				.padding(.bottom, 5)
+//				ZStack {
+//					// MARK: - Ingredient Name
+//					Capsule()
+//						.fill(Color.gray.opacity(0.2))
+//						.frame(height: 50)
+//						.padding(.leading)
+//						.padding(.trailing)
+//					TextField("Ingredient Name", text: $draft.name)
+//						.font(.title)
+//						.padding(.leading, 40)
+//                       .padding(.trailing, 40)
+//						.focused($focusedField, equals: .name)
+//						.submitLabel(.next)
+//						.onSubmit {
+//							focusedField = .amount
+//						}
+//				}
+//				.padding(.top,25)
+//				.padding(.bottom, 5)
+                
+                TextField("Ingredient Name", text: $draft.name, axis: .vertical)
+                    .font(.title)
+                    .padding(.horizontal, 30)
+                        .padding(.vertical, 5)
+                        .background {
+                            RoundedRectangle(cornerRadius: 22)
+                                .fill(.gray.opacity(0.2))
+                        }
+                        .padding(.horizontal) // outside screen margin
+                    .focused($focusedField, equals: .name)
+                    .submitLabel(.next)
+                    .onChange(of: draft.name) { _, newValue in
+                        guard newValue.contains("\n") else {return}
+                        
+                        draft.name = newValue.replacingOccurrences(of: "\n", with: "")
+                        focusedField = .amount
+                    }
+                
+                
+                
 				
 				
 				// MARK: - Amount/Unit
@@ -128,6 +150,7 @@ struct IngredientEditor: View {
 				if let onDelete {
 					Button(role: .destructive, action: {
 						onDelete()
+                        dismiss()
 						
 					}) {
 						Text("Delete")

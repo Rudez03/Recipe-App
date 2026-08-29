@@ -32,7 +32,6 @@ struct EditRecipe: View {
     let recipe: Recipe
     var onDelete: () -> Void
 	
-	
     var body: some View {
         ScrollView{
             VStack(alignment: .leading){
@@ -136,13 +135,22 @@ struct EditRecipe: View {
                 }
 				.sheet(item: $selectedIngredient) { selected in
 					NavigationStack{
-						IngredientEditor(draftIngredient: selected, onSave: {updatedDraft in
+						IngredientEditor(draftIngredient: selected,
+                            onSave: {updatedDraft in
 							if let index = draft.ingredients.firstIndex(where: { ingredient in
 								ingredient.id == updatedDraft.id
 							}) {
 								draft.ingredients[index] = updatedDraft
 							}
-						})
+						},
+                            onDelete: { draft.ingredients.removeAll( where: { ingredient in
+                                ingredient.id == selected.id
+                                             
+                            })
+                                             
+                        }
+                                         
+                        )
 						.presentationDetents([.medium])
 					}
 				}
@@ -219,6 +227,7 @@ struct EditRecipe: View {
                 }
                 
             }
+            
 			//.padding(.leading)
             .frame(maxWidth: .infinity, alignment: .leading)
         }
@@ -229,11 +238,7 @@ struct EditRecipe: View {
 		.toolbar {
 			ToolbarItem(placement: .confirmationAction) {
 				Button("Save"){
-                    recipe.name = draft.name
-                    recipe.totalMins = (draft.hours * 60) + draft.mins
-                    recipe.descrip = draft.descrip
-                    recipe.servings = draft.servings
-                    recipe.instructions = draft.instructions
+                    updateRecipe()
 					dismiss()
 				}
 			}
@@ -247,6 +252,51 @@ struct EditRecipe: View {
     }
 	
 }
+
+private extension EditRecipe {
+    func updateRecipe() {
+        recipe.name = draft.name
+        recipe.totalMins = (draft.hours * 60) + draft.mins
+        recipe.descrip = draft.descrip
+        recipe.servings = draft.servings
+        recipe.instructions = draft.instructions
+        
+       let existingIngredients = recipe.ingredients
+        for existing in existingIngredients {
+            let stillExisting = draft.ingredients.contains(where: { draftIngredient in
+                existing.id == draftIngredient.id
+            })
+            
+            if !stillExisting{
+                modelContext.delete(existing)
+            }
+        }
+        
+        for draftIngredient in draft.ingredients {
+            if let matching = existingIngredients.first(where: { existing in
+                existing.id == draftIngredient.id
+            }) {
+                matching.name = draftIngredient.name
+                matching.amount = draftIngredient.amount
+                matching.unit = draftIngredient.unit
+                matching.notes = draftIngredient.notes
+            }
+            else {
+                let newIngredient = Ingredient(
+                        name: draftIngredient.name,
+                        amount: draftIngredient.amount,
+                        unit: draftIngredient.unit,
+                        notes: draftIngredient.notes
+                    )
+                recipe.ingredients.append(newIngredient)
+            }
+        }
+        
+        
+        
+    }
+}
+
 
 #Preview {
 	NavigationStack{
