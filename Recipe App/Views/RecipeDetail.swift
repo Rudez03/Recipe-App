@@ -19,7 +19,7 @@ struct RecipeDetail: View {
                     
                     // MARK: - Header
                     Text(recipe.name)
-                        .font(.title)
+                        .font(.largeTitle)
                         .fontWeight(.semibold)
                         .padding(.top, 20)
                         .padding(.bottom, 5)

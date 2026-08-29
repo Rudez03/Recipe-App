@@ -37,7 +37,7 @@ struct EditRecipe: View {
             VStack(alignment: .leading){
                 // MARK: - Name
                 TextField("Recipe Name", text: $draft.name, axis: .vertical)
-                    .font(.title)
+                    .font(.largeTitle)
                     .fontWeight(.semibold)
                     .padding(.top, 20)
                     .padding(.bottom, 5)

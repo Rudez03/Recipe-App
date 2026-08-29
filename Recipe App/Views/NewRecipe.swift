@@ -37,7 +37,7 @@ struct NewRecipe: View {
                 // MARK: - Header
                 TextField("Recipe Name", text: $recipe.name, axis: .vertical)
 					.focused($isFocused)
-                    .font(.title)
+                    .font(.largeTitle)
                     .fontWeight(.semibold)
                     .padding(.top, 40)
                     .padding(.bottom, 20)
