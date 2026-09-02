@@ -24,6 +24,7 @@ struct NewRecipe: View {
 	
 	// Keyboard dismissal
 	@FocusState private var isFocused: Bool
+	@FocusState private var noteIsFocused: Bool
 	
 	
 	// IngredientSheet
@@ -174,23 +175,42 @@ struct NewRecipe: View {
                     .padding(.top,5)
                     .padding(.bottom, 5)
                 
+				ZStack(alignment: .topLeading){
 					
-					TextField("Add Instructions ", text: $recipe.instructions, axis: .vertical )
-						.focused($isFocused)
-						.font(.body)
-						.multilineTextAlignment(.leading)
-						.padding(.bottom, 20)
-						.padding(.leading)
-						.padding(.trailing,10)
-						.submitLabel(.done)
-						.onChange(of: recipe.instructions) { oldValue, newValue in
-							guard isFocused else { return }
-							guard newValue.last == "\n" else { return }
-							
-							recipe.instructions.removeLast()
-							isFocused = false
-						}
-				.foregroundStyle(.gray)
+					TextEditor(text: $recipe.instructions)
+					.font(.body)
+						.focused($noteIsFocused)
+					
+					
+					if recipe.instructions.isEmpty {
+						Text("Add Instructions")
+							.font(.body)
+							.padding(.top, 8)
+							.padding(.leading, 5)
+							.foregroundStyle(.gray)
+							.allowsHitTesting(false)
+					}
+				}
+				.padding(.leading)
+				.padding(.trailing)
+				
+				
+//					TextField("Add Instructions ", text: $recipe.instructions, axis: .vertical )
+//						.focused($isFocused)
+//						.font(.body)
+//						.multilineTextAlignment(.leading)
+//						.padding(.bottom, 20)
+//						.padding(.leading)
+//						.padding(.trailing,10)
+//						.submitLabel(.done)
+//						.onChange(of: recipe.instructions) { oldValue, newValue in
+//							guard isFocused else { return }
+//							guard newValue.last == "\n" else { return }
+//							
+//							recipe.instructions.removeLast()
+//							isFocused = false
+//						}
+//				.foregroundStyle(.gray)
                 Spacer()
             }
             
