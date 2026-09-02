@@ -24,7 +24,7 @@ struct NewRecipe: View {
 	
 	// Keyboard dismissal
 	@FocusState private var isFocused: Bool
-	@FocusState private var noteIsFocused: Bool
+	@FocusState private var instructionIsFocused: Bool
 	
 	
 	// IngredientSheet
@@ -178,7 +178,7 @@ struct NewRecipe: View {
 					
 					TextEditor(text: $recipe.instructions)
 					.font(.body)
-					.focused($noteIsFocused)
+					.focused($instructionIsFocused)
 					.multilineTextAlignment(.leading)
 					
 					

@@ -21,7 +21,7 @@ struct EditRecipe: View {
     
     // MARK: - Keyboard
     @FocusState private var isFocused: Bool
-	@FocusState private var noteIsFocused: Bool
+	@FocusState private var instructionIsFocused: Bool
     
     // MARK: - Draft Init
     init(recipe: Recipe, onDelete: @escaping () -> Void) {
@@ -196,7 +196,7 @@ struct EditRecipe: View {
 					
 					TextEditor(text: $draft.instructions)
 						.font(.body)
-						.focused($noteIsFocused)
+						.focused($instructionIsFocused)
 						.multilineTextAlignment(.leading)
 					
 					
