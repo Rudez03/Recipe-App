@@ -173,13 +173,13 @@ struct NewRecipe: View {
                     .font(.title3.bold())
                     .padding(.leading)
                     .padding(.top,5)
-                    .padding(.bottom, 5)
                 
 				ZStack(alignment: .topLeading){
 					
 					TextEditor(text: $recipe.instructions)
 					.font(.body)
-						.focused($noteIsFocused)
+					.focused($noteIsFocused)
+					.multilineTextAlignment(.leading)
 					
 					
 					if recipe.instructions.isEmpty {
@@ -189,28 +189,14 @@ struct NewRecipe: View {
 							.padding(.leading, 5)
 							.foregroundStyle(.gray)
 							.allowsHitTesting(false)
+
 					}
 				}
-				.padding(.leading)
+				.padding(.leading,  12)
 				.padding(.trailing)
+				.padding(.top,-10)
+			
 				
-				
-//					TextField("Add Instructions ", text: $recipe.instructions, axis: .vertical )
-//						.focused($isFocused)
-//						.font(.body)
-//						.multilineTextAlignment(.leading)
-//						.padding(.bottom, 20)
-//						.padding(.leading)
-//						.padding(.trailing,10)
-//						.submitLabel(.done)
-//						.onChange(of: recipe.instructions) { oldValue, newValue in
-//							guard isFocused else { return }
-//							guard newValue.last == "\n" else { return }
-//							
-//							recipe.instructions.removeLast()
-//							isFocused = false
-//						}
-//				.foregroundStyle(.gray)
                 Spacer()
             }
             

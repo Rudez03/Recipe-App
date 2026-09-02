@@ -21,6 +21,7 @@ struct EditRecipe: View {
     
     // MARK: - Keyboard
     @FocusState private var isFocused: Bool
+	@FocusState private var noteIsFocused: Bool
     
     // MARK: - Draft Init
     init(recipe: Recipe, onDelete: @escaping () -> Void) {
@@ -34,94 +35,98 @@ struct EditRecipe: View {
 	
     var body: some View {
         ScrollView{
-            VStack(alignment: .leading){
-                // MARK: - Name
-                TextField("Recipe Name", text: $draft.name, axis: .vertical)
-                    .font(.largeTitle)
-                    .fontWeight(.semibold)
-                    .padding(.top, 20)
-                    .padding(.bottom, 5)
-                    .focused($isFocused)
-                    .submitLabel(.done)
-                    .onChange(of: draft.name) { _, newValue in
-                        guard newValue.contains("\n") else {return}
-                        
-                        draft.name = newValue.replacingOccurrences(of: "\n", with: "")
-                        isFocused = false
-                    }
-                
-                HStack{
-                    
-                    // MARK: hrs
-                    Image(systemName: "clock")
-                        .padding(.trailing, -5)
-                    
-                    Picker("Hours", selection: $draft.hours) {
-                        ForEach(0...24, id: \.self) { hr in
-                            Text("\(hr) hrs")
-                                .tag(hr)
-                        }
-                    }
-                    .pickerStyle(.menu)
-                    .fixedSize(horizontal: true, vertical: false)
-                    
-                    // MARK: Mins
-                    Picker("Mins", selection: $draft.mins) {
-                        ForEach(Array(stride(from: 0, through: 55, by: 5)), id: \.self) { min in
-                            Text("\(min) mins")
-                                .tag(min)
-                        }
-                    }
-                    
-                    .pickerStyle(.menu)
-                    .fixedSize(horizontal: true, vertical: false)
-                    
-                    
-                    Spacer()
-                    
-                    // MARK: - Servings
-                    Image(systemName: "person.crop.circle")
-                        .padding(.trailing, -5)
-                    Picker("serving size", selection: $draft.servings) {
-                        Text("Not Set")
-                            .tag(nil as Int?)
-                        
-                        ForEach( 1...20, id: \.self) { number in
-                            Text("\(number) servings")
-                                .tag(Optional(number))
-                            
-                        }
-                    }
-                    .padding(.trailing, -14)
-                    
-                }
-                .pickerStyle(.menu)
-                .padding(.bottom)
-                
-                // MARK: - Description
-                TextField("Add Description", text: $draft.descrip, axis: .vertical)
-                    .font(.body)
-                    .multilineTextAlignment(.leading)
-                    .padding(.bottom, 30)
-                    .focused($isFocused)
-                    .submitLabel(.done)
-                    .onChange(of: draft.descrip) { oldValue, newValue in
-                        guard isFocused else { return }
-                        guard newValue.last == "\n" else { return }
-
-                        draft.descrip.removeLast()
-                        isFocused = false
-                    }
-                
-                Spacer()
-                // MARK: - Ingredients
-                Text("Ingredients")
-                    .font(.title3.bold())
-                    //.underline()
-                    .padding(.bottom, 5)
-                
-                
-                ForEach(draft.ingredients) { ingredient in
+			VStack(alignment: .leading){
+				// MARK: - Name
+				TextField("Recipe Name", text: $draft.name, axis: .vertical)
+					.font(.largeTitle)
+					.fontWeight(.semibold)
+					.padding(.top, 20)
+					.padding(.leading)
+					.padding(.trailing)
+					.padding(.bottom, 5)
+					.focused($isFocused)
+					.submitLabel(.done)
+					.onChange(of: draft.name) { _, newValue in
+						guard newValue.contains("\n") else {return}
+						
+						draft.name = newValue.replacingOccurrences(of: "\n", with: "")
+						isFocused = false
+					}
+				
+				HStack{
+					
+					// MARK: hrs
+					Image(systemName: "clock")
+						.padding(.trailing, -5)
+						.padding(.leading)
+					
+					Picker("Hours", selection: $draft.hours) {
+						ForEach(0...24, id: \.self) { hr in
+							Text("\(hr) hrs")
+								.tag(hr)
+						}
+					}
+					.pickerStyle(.menu)
+					.fixedSize(horizontal: true, vertical: false)
+					
+					// MARK: Mins
+					Picker("Mins", selection: $draft.mins) {
+						ForEach(Array(stride(from: 0, through: 55, by: 5)), id: \.self) { min in
+							Text("\(min) mins")
+								.tag(min)
+						}
+					}
+					.pickerStyle(.menu)
+					.fixedSize(horizontal: true, vertical: false)
+					
+					
+					Spacer()
+					
+					// MARK: - Servings
+					Image(systemName: "person.crop.circle")
+						.padding(.trailing, -5)
+					Picker("serving size", selection: $draft.servings) {
+						Text("Not Set")
+							.tag(nil as Int?)
+						
+						ForEach( 1...20, id: \.self) { number in
+							Text("\(number) servings")
+								.tag(Optional(number))
+							
+						}
+					}
+					.padding(.trailing)
+					
+				}
+				.pickerStyle(.menu)
+				.padding(.bottom)
+				
+				// MARK: - Description
+				TextField("Add Description", text: $draft.descrip, axis: .vertical)
+					.font(.body)
+					.multilineTextAlignment(.leading)
+					.padding(.leading)
+					.padding(.trailing)
+					.padding(.bottom, 30)
+					.focused($isFocused)
+					.submitLabel(.done)
+					.onChange(of: draft.descrip) { oldValue, newValue in
+						guard isFocused else { return }
+						guard newValue.last == "\n" else { return }
+						
+						draft.descrip.removeLast()
+						isFocused = false
+					}
+				
+				Spacer()
+				// MARK: - Ingredients
+				Text("Ingredients")
+					.font(.title3.bold())
+					.padding(.leading)
+					.padding(.bottom, 5)
+				
+				
+				ForEach(draft.ingredients) { ingredient in
 					Button {
 						selectedIngredient = ingredient
 					} label: {
@@ -131,29 +136,31 @@ struct EditRecipe: View {
 						)
 					}
 					.buttonStyle(.plain)
-                }
+				}
+				.padding(.leading)
+				.padding(.trailing)
 				.sheet(item: $selectedIngredient) { selected in
 					NavigationStack{
 						IngredientEditor(draftIngredient: selected,
-                            onSave: {updatedDraft in
+										 onSave: {updatedDraft in
 							if let index = draft.ingredients.firstIndex(where: { ingredient in
 								ingredient.id == updatedDraft.id
 							}) {
 								draft.ingredients[index] = updatedDraft
 							}
 						},
-                            onDelete: { draft.ingredients.removeAll( where: { ingredient in
-                                ingredient.id == selected.id
-                                             
-                            })
-                                             
-                        }
-                                         
-                        )
+										 onDelete: { draft.ingredients.removeAll( where: { ingredient in
+							ingredient.id == selected.id
+							
+						})
+							
+						}
+										 
+						)
 						.presentationDetents([.medium])
 					}
 				}
-
+				
 				// Add Ingredient Button
 				Button(action: {
 					isShowingIngredient.toggle()
@@ -166,39 +173,49 @@ struct EditRecipe: View {
 					}
 					.foregroundStyle(.gray)
 				}
+				.padding(.leading)
 				.sheet(isPresented: $isShowingIngredient) {
 				} content: {
 					NavigationStack{
 						IngredientEditor{ savedDraft in
 							draft.ingredients.append(savedDraft)
 						}
-							.presentationDetents([.medium])
+						.presentationDetents([.medium])
 					}
 				}
-                
-                // MARK: - Instructions
-                Text("Instructions")
-                    .font(.title3.bold())
-                    
-                    .padding(.top,5)
-                    .padding(.bottom, 5)
-                
-                    
-                    TextField("Add Instructions ", text: $draft.instructions, axis: .vertical )
-                        .focused($isFocused)
-                        .font(.body)
-                        .multilineTextAlignment(.leading)
-                        .padding(.bottom, 20)
-                        .submitLabel(.done)
-                        .onChange(of: draft.instructions) { oldValue, newValue in
-                            guard isFocused else { return }
-                            guard newValue.last == "\n" else { return }
-                            
-                            draft.instructions.removeLast()
-                            isFocused = false
-                        }
-                .foregroundStyle(.gray)
-                Spacer()
+				
+				// MARK: - Instructions
+				Text("Instructions")
+					.font(.title3.bold())
+					.padding(.top,5)
+					.padding(.leading)
+					.padding(.bottom, 5)
+				
+				
+				ZStack(alignment: .topLeading){
+					
+					TextEditor(text: $draft.instructions)
+						.font(.body)
+						.focused($noteIsFocused)
+						.multilineTextAlignment(.leading)
+					
+					
+					if draft.instructions.isEmpty {
+						Text("Add Instructions")
+							.font(.body)
+							.padding(.top, 8)
+							.padding(.leading, 5)
+							.foregroundStyle(.gray)
+							.allowsHitTesting(false)
+					}
+					
+				}
+				.padding(.leading,  12)
+				.padding(.trailing)
+				.padding(.top,-10)
+				
+				
+				Spacer()
                 
                 // MARK: - Delete action
                 Button(role: .destructive, action: {
@@ -231,8 +248,8 @@ struct EditRecipe: View {
 			//.padding(.leading)
             .frame(maxWidth: .infinity, alignment: .leading)
         }
-       
-        .padding()
+		.frame(maxWidth: .infinity, alignment: .leading)
+       // .padding()
         .navigationBarTitleDisplayMode(.inline)
         //MARK: - Save/Cancel actions
 		.toolbar {
@@ -305,4 +322,9 @@ private extension EditRecipe {
         }
             .modelContainer(SampleData.shared.modelContainer)
 	}
+}
+
+#Preview("Empty Edit") {
+	EditRecipe(recipe: Recipe(name: ""), onDelete: {})
+		.modelContainer(for: [Recipe.self, Ingredient.self], inMemory: true)
 }
