@@ -25,10 +25,13 @@ class Recipe: Identifiable {
     var totalMins: Int
     var servings: Int?
     var icon: String?
-    // make a list of strings I think....
-    var instructions: String
 	
-	init(name: String, descrip: String = "", ingredients: [Ingredient] = [], prepTime: String = "", totalMins: Int = 0, servings: Int? = nil, icon: String? = nil, instructions: String = "") {
+    // Instructions: freeform and step by step
+    var instructions: String
+	@Relationship(deleteRule: .cascade, inverse: \RecipeStep.recipe)
+	var steps: [RecipeStep]
+	
+	init(name: String, descrip: String = "", ingredients: [Ingredient] = [], prepTime: String = "", totalMins: Int = 0, servings: Int? = nil, icon: String? = nil, instructions: String = "", steps: [RecipeStep] = []) {
 		self.name = name
 		self.descrip = descrip
 		self.ingredients = ingredients
@@ -37,6 +40,7 @@ class Recipe: Identifiable {
 		self.servings = servings
 		self.icon = icon
 		self.instructions = instructions
+		self.steps = steps
 		
 	}
 	

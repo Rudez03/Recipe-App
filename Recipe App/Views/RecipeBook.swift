@@ -103,5 +103,5 @@ struct RecipeBook: View {
 
 #Preview("Empty Book") {
     RecipeBook()
-        .modelContainer(for: [Recipe.self, Ingredient.self], inMemory: true)
+		.modelContainer(for: [Recipe.self, Ingredient.self, RecipeStep.self], inMemory: true)
 }

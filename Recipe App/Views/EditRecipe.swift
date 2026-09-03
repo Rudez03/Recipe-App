@@ -326,5 +326,5 @@ private extension EditRecipe {
 
 #Preview("Empty Edit") {
 	EditRecipe(recipe: Recipe(name: ""), onDelete: {})
-		.modelContainer(for: [Recipe.self, Ingredient.self], inMemory: true)
+		.modelContainer(for: [Recipe.self, Ingredient.self, RecipeStep.self], inMemory: true)
 }

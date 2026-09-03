@@ -166,7 +166,7 @@ class SampleData {
     }
     
     private init() {
-        let schema = Schema([ Recipe.self, Ingredient.self])
+		let schema = Schema([ Recipe.self, Ingredient.self, RecipeStep.self])
         
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
         
