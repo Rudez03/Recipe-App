@@ -211,6 +211,13 @@ struct NewRecipe: View {
             ToolbarItem(placement: .confirmationAction) {
                 Button("Save"){
                     recipe.totalMins = (hours * 60) + mins
+                    recipe.steps = steps.map { draftStep in
+                        RecipeStep(
+                            name: draftStep.name,
+                            details: draftStep.details,
+                            step: draftStep.step
+                            )
+                    }
                     onSave(recipe)
                     dismiss()
                 }
