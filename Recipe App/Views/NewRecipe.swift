@@ -21,6 +21,7 @@ struct NewRecipe: View {
 			.trimmingCharacters(in: .whitespacesAndNewlines)
 			.isEmpty
 	}
+    @State private var steps: [DraftRecipeStep] = []
 	
 	// Keyboard dismissal
 	@FocusState private var isFocused: Bool
@@ -95,6 +96,7 @@ struct NewRecipe: View {
                             
                         }
                     }
+					.padding(.trailing)
                     
                 }
                 .pickerStyle(.menu)
@@ -110,7 +112,7 @@ struct NewRecipe: View {
                     .multilineTextAlignment(.leading)
                     .padding(.bottom, 20)
                     .padding(.leading)
-					.padding(.trailing,10)
+					.padding(.trailing)
 					.submitLabel(.done)
 					.onChange(of: recipe.descrip) { oldValue, newValue in
 						guard isFocused else { return }
@@ -134,6 +136,7 @@ struct NewRecipe: View {
                                   notes: ingredient.notes)
                 }
 				.padding(.leading)
+				.padding(.trailing)
 				
                 // ingredient sheet presentation
                 Button(action: {
@@ -196,11 +199,35 @@ struct NewRecipe: View {
 				.padding(.trailing)
 				.padding(.top,-10)
 			
-				
                 Spacer()
+				
+				// MARK: - Recipe Step
+				
+				ForEach($steps) { $draftStep in
+					Text("Step \(draftStep.step + 1) ")
+						.fontWeight(.bold)
+					TextField("Step Name", text: $draftStep.name)
+					
+					TextField ("Step Details", text: $draftStep.details, axis: .vertical)
+					
+				}
+				.padding(.leading)
+				.padding( .trailing)
+				
+				Button("Add Step") {
+					steps.append(
+						DraftRecipeStep(
+							name: "",
+							details: "",
+							step: steps.count
+						)
+					)
+				}
+				.padding(.leading)
+			
+				
+				
             }
-            
-            
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .navigationBarTitle("New Recipe")

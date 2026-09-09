@@ -214,8 +214,31 @@ struct EditRecipe: View {
 				.padding(.trailing)
 				.padding(.top,-10)
 				
-				
 				Spacer()
+				
+				//MARK: -Recipe Step
+				
+				ForEach($draft.steps) { $draftStep in
+					Text("Step \(draftStep.step + 1)")
+						.fontWeight(.bold)
+					
+					TextField("Step Name", text: $draftStep.name)
+					TextField ("Step Details", text: $draftStep.details, axis: .vertical)
+					
+				}
+				.padding(.leading)
+				.padding(.trailing)
+				
+				Button("Add Step") {
+					draft.steps.append(
+						DraftRecipeStep(
+							name: "",
+							details: "",
+							step: draft.steps.count
+						)
+					)
+				}
+				.padding(.leading)
                 
                 // MARK: - Delete action
                 Button(role: .destructive, action: {
@@ -279,6 +302,7 @@ private extension EditRecipe {
         recipe.instructions = draft.instructions
         
        let existingIngredients = recipe.ingredients
+		
         for existing in existingIngredients {
             let stillExisting = draft.ingredients.contains(where: { draftIngredient in
                 existing.id == draftIngredient.id
@@ -309,6 +333,35 @@ private extension EditRecipe {
             }
         }
         
+		let existingSteps = recipe.steps
+		
+		for existing in existingSteps {
+			let stillExisting = draft.steps.contains(where: { draftStep in
+				existing.id == draftStep.id
+			})
+			
+			if !stillExisting{
+				modelContext.delete(existing)
+			}
+		}
+		
+		for draftStep in draft.steps {
+			if let matching = existingSteps.first(where: { existing in
+				existing.id == draftStep.id
+			}) {
+				matching.name = draftStep.name
+				matching.details = draftStep.details
+				matching.step = draftStep.step
+			}
+			else {
+				let newStep = RecipeStep(
+					name: draftStep.name,
+					details: draftStep.details,
+					step: draftStep.step
+				)
+				recipe.steps.append(newStep)
+			}
+		}
         
         
     }
