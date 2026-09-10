@@ -30,6 +30,10 @@ struct EditRecipe: View {
         self.onDelete = onDelete
     }
     
+	//Step by Step view
+	@State private var isShowingSteps: Bool = false
+	
+	
     let recipe: Recipe
     var onDelete: () -> Void
 	
@@ -191,54 +195,76 @@ struct EditRecipe: View {
 					.padding(.leading)
 					.padding(.bottom, 5)
 				
-				
-				ZStack(alignment: .topLeading){
+				HStack(alignment: .center){
+					Button("Free-form") {
+						isShowingSteps = false
+					}
+					.fontWeight(!isShowingSteps ? .bold : .regular)
+					.underline(!isShowingSteps)
 					
-					TextEditor(text: $draft.instructions)
+					.padding(.trailing, 20)
+					
+					Button("Step-by-Step") {
+						isShowingSteps = true
+					}
+					.fontWeight(isShowingSteps ? .bold : .regular)
+					.underline(isShowingSteps)
+				}
+				.frame(maxWidth: .infinity, alignment: .center)
+				.padding(.bottom, 5)
+				
+				// Free-form vs Step by Step
+				if !isShowingSteps {
+					ZStack(alignment: .topLeading){
+						
+						TextEditor(text: $draft.instructions)
 						.font(.body)
 						.focused($instructionIsFocused)
 						.multilineTextAlignment(.leading)
-					
-					
-					if draft.instructions.isEmpty {
-						Text("Add Instructions")
-							.font(.body)
-							.padding(.top, 8)
-							.padding(.leading, 5)
-							.foregroundStyle(.gray)
-							.allowsHitTesting(false)
+						
+						
+						if draft.instructions.isEmpty {
+							Text("Add Instructions")
+								.font(.body)
+								.padding(.top, 8)
+								.padding(.leading, 5)
+								.foregroundStyle(.gray)
+								.allowsHitTesting(false)
+
+						}
 					}
+					.padding(.leading,  12)
+					.padding(.trailing)
+					.padding(.top,-10)
+				
+					Spacer()
 					
-				}
-				.padding(.leading,  12)
-				.padding(.trailing)
-				.padding(.top,-10)
-				
-				Spacer()
-				
-				//MARK: -Recipe Step
-				
-				ForEach($draft.steps) { $draftStep in
-					Text("Step \(draftStep.step + 1)")
-						.fontWeight(.bold)
+					//  Recipe Step
+				} else if isShowingSteps {
+					ForEach($draft.steps) { $draftStep in
+						Text("Step \(draftStep.step + 1) ")
+							.fontWeight(.bold)
+						TextField("Step Name", text: $draftStep.name)
+						
+						TextField ("Step Details", text: $draftStep.details, axis: .vertical)
+						
+					}
+					.padding(.leading)
+					.padding( .trailing)
 					
-					TextField("Step Name", text: $draftStep.name)
-					TextField ("Step Details", text: $draftStep.details, axis: .vertical)
-					
-				}
-				.padding(.leading)
-				.padding(.trailing)
-				
-				Button("Add Step") {
-					draft.steps.append(
-						DraftRecipeStep(
-							name: "",
-							details: "",
-							step: draft.steps.count
+					Button("Add Step") {
+						draft.steps.append(
+							DraftRecipeStep(
+								name: "",
+								details: "",
+								step: draft.steps.count
+							)
 						)
-					)
+					}
+					.font(.body)
+					.padding(.top, 1)
+					.padding(.leading)
 				}
-				.padding(.leading)
                 
                 // MARK: - Delete action
                 Button(role: .destructive, action: {

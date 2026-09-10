@@ -34,7 +34,7 @@ struct DraftRecipe {
             DraftIngredient(from: ingredient)
         }
         
-        self.steps = recipe.steps.map { steps in
+		self.steps = recipe.steps.sorted{ $0.step < $1.step}.map { steps in
             DraftRecipeStep(from: steps)
         }
     }

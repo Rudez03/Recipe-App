@@ -27,10 +27,12 @@ struct NewRecipe: View {
 	@FocusState private var isFocused: Bool
 	@FocusState private var instructionIsFocused: Bool
 	
-	
 	// IngredientSheet
     @State private var isShowingIngredient = false
     
+	//Step by Step view
+	@State private var isShowingSteps: Bool = false
+	
     
     var body: some View {
         ScrollView {
@@ -176,54 +178,86 @@ struct NewRecipe: View {
                     .font(.title3.bold())
                     .padding(.leading)
                     .padding(.top,5)
+					.padding(.bottom, 5)
                 
-				ZStack(alignment: .topLeading){
-					
-					TextEditor(text: $recipe.instructions)
-					.font(.body)
-					.focused($instructionIsFocused)
-					.multilineTextAlignment(.leading)
-					
-					
-					if recipe.instructions.isEmpty {
-						Text("Add Instructions")
-							.font(.body)
-							.padding(.top, 8)
-							.padding(.leading, 5)
-							.foregroundStyle(.gray)
-							.allowsHitTesting(false)
-
+				HStack(alignment: .center){
+					Button("Free-form") {
+						isShowingSteps = false
 					}
-				}
-				.padding(.leading,  12)
-				.padding(.trailing)
-				.padding(.top,-10)
-			
-                Spacer()
-				
-				// MARK: - Recipe Step
-				
-				ForEach($steps) { $draftStep in
-					Text("Step \(draftStep.step + 1) ")
-						.fontWeight(.bold)
-					TextField("Step Name", text: $draftStep.name)
+					.fontWeight(!isShowingSteps ? .bold : .regular)
+					.underline(!isShowingSteps)
 					
-					TextField ("Step Details", text: $draftStep.details, axis: .vertical)
+					.padding(.trailing, 20)
 					
+					Button("Step-by-Step") {
+						isShowingSteps = true
+					}
+					.fontWeight(isShowingSteps ? .bold : .regular)
+					.underline(isShowingSteps)
 				}
-				.padding(.leading)
-				.padding( .trailing)
+				.frame(maxWidth: .infinity, alignment: .center)
+				.padding(.bottom, 5)
+				//.border(Color.gray, width: 0.5)
 				
-				Button("Add Step") {
-					steps.append(
-						DraftRecipeStep(
-							name: "",
-							details: "",
-							step: steps.count
+				// Free-form vs Step by Step
+				if !isShowingSteps {
+					ZStack(alignment: .topLeading){
+						
+						TextEditor(text: $recipe.instructions)
+						.font(.body)
+						.focused($instructionIsFocused)
+						.multilineTextAlignment(.leading)
+						
+						
+						if recipe.instructions.isEmpty {
+							Text("Add Instructions")
+								.font(.body)
+								.padding(.top, 8)
+								.padding(.leading, 5)
+								.foregroundStyle(.gray)
+								.allowsHitTesting(false)
+
+						}
+					}
+					.padding(.leading,  12)
+					.padding(.trailing)
+					.padding(.top,-10)
+				
+					Spacer()
+					
+					//  Recipe Step
+				} else if isShowingSteps {
+					ForEach($steps) { $draftStep in
+						Text("Step \(draftStep.step + 1) ")
+							.fontWeight(.bold)
+						TextField("Step Name", text: $draftStep.name)
+						
+						TextField ("Step Details", text: $draftStep.details, axis: .vertical)
+						
+					}
+					.padding(.leading)
+					.padding( .trailing)
+					
+					Button("Add Step") {
+						steps.append(
+							DraftRecipeStep(
+								name: "",
+								details: "",
+								step: steps.count
+							)
 						)
-					)
+					}
+					.font(.body)
+					.padding(.top, 1)
+					.padding(.leading)
 				}
-				.padding(.leading)
+				
+				
+				
+				
+			
+				
+				
 			
 				
 				
