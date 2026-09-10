@@ -26,6 +26,7 @@ struct NewRecipe: View {
 	// Keyboard dismissal
 	@FocusState private var isFocused: Bool
 	@FocusState private var instructionIsFocused: Bool
+	@FocusState private var focusedStepID: UUID?
 	
 	// IngredientSheet
     @State private var isShowingIngredient = false
@@ -35,237 +36,251 @@ struct NewRecipe: View {
 	
     
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading) {
-                
-                // MARK: - Header
-                TextField("Recipe Name", text: $recipe.name, axis: .vertical)
-					.focused($isFocused)
-                    .font(.largeTitle)
-                    .fontWeight(.semibold)
-                    .padding(.top, 40)
-                    .padding(.bottom, 20)
-                    .padding(.leading)
-                    .padding(.trailing)
-					.submitLabel(.done)
-                    .onChange(of: recipe.name) { _, newValue in
-                        guard newValue.contains("\n") else {return}
-                        
-                        recipe.name = newValue.replacingOccurrences(of: "\n", with: "")
-                        isFocused = false
-                    }
-                
-                
-                
-                // MARK: - Time and Servings
-                HStack{
-                    
-                    // MARK: hrs
-                    Image(systemName: "clock")
-                        .padding(.leading)
-                    
-                    Picker("Hours", selection: $hours) {
-                        ForEach(0...24, id: \.self) { hr in
-                            Text("\(hr) hrs")
-                                .tag(hr)
-                        }
-                    }
-                    .pickerStyle(.menu)
-                    .fixedSize(horizontal: true, vertical: false)
-                    
-                    // MARK: Mins
-                    Picker("Mins", selection: $mins) {
-                        ForEach(Array(stride(from: 0, through: 55, by: 5)), id: \.self) { min in
-                            Text("\(min) mins")
-                                .tag(min)
-                        }
-                    }
-                    .pickerStyle(.menu)
-                    .fixedSize(horizontal: true, vertical: false)
-                    Spacer()
-                    
-                    
-
-                    // MARK: - Servings
-                    Image(systemName: "person.crop.circle")
-                    Picker("serving size", selection: $recipe.servings) {
-                        Text("Not Set")
-                            .tag(nil as Int?)
-                        
-                        ForEach( 1...20, id: \.self) { number in
-                            Text("\(number) servings")
-                                .tag(Optional(number))
-                            
-                        }
-                    }
-					.padding(.trailing)
-                    
-                }
-                .pickerStyle(.menu)
-                .padding(.bottom)
-                
-                
-                
-                // MARK: - Description
-                TextField("Add Description", text: $recipe.descrip, axis: .vertical)
-					.focused($isFocused)
-                    .lineLimit(2...4)
-                    .font(.body)
-                    .multilineTextAlignment(.leading)
-                    .padding(.bottom, 20)
-                    .padding(.leading)
-					.padding(.trailing)
-					.submitLabel(.done)
-					.onChange(of: recipe.descrip) { oldValue, newValue in
-						guard isFocused else { return }
-						guard newValue.last == "\n" else { return }
-
-						recipe.descrip.removeLast()
-						isFocused = false
-					}
+		ScrollViewReader{ proxy in
+			ScrollView {
+				VStack(alignment: .leading) {
 					
-                
-                
-                
-                // MARK: - Ingredients
-                Text("Ingredients")
-                    .font(.title3.bold())
-                    .padding(.leading)
-                    .padding(.bottom, 5)
-				
-                ForEach(recipe.ingredients) { ingredient in
-                    IngredientRow(displayText: ingredient.displayText,
-                                  notes: ingredient.notes)
-                }
-				.padding(.leading)
-				.padding(.trailing)
-				
-                // ingredient sheet presentation
-                Button(action: {
-                    isShowingIngredient.toggle()
-                }) {
-                    HStack{
-                        Image(systemName: "plus.circle")
-                            .font(.caption)
-                            .offset(y: 0.2)
-                        Text("Add Ingredient")
-                    }
-                    .foregroundStyle(.gray)
-                }
-                .padding(.leading)
-                .sheet(isPresented: $isShowingIngredient) {
-                } content: {
-                    NavigationStack{
-                        IngredientEditor{ savedDraft in
-							let newIngredient = Ingredient(
+					// MARK: - Header
+					TextField("Recipe Name", text: $recipe.name, axis: .vertical)
+						.focused($isFocused)
+						.font(.largeTitle)
+						.fontWeight(.semibold)
+						.padding(.top, 40)
+						.padding(.bottom, 20)
+						.padding(.leading)
+						.padding(.trailing)
+						.submitLabel(.done)
+						.onChange(of: recipe.name) { _, newValue in
+							guard newValue.contains("\n") else {return}
+							
+							recipe.name = newValue.replacingOccurrences(of: "\n", with: "")
+							isFocused = false
+						}
+					
+					
+					
+					// MARK: - Time and Servings
+					HStack{
+						
+						// MARK: hrs
+						Image(systemName: "clock")
+							.padding(.leading)
+						
+						Picker("Hours", selection: $hours) {
+							ForEach(0...24, id: \.self) { hr in
+								Text("\(hr) hrs")
+									.tag(hr)
+							}
+						}
+						.pickerStyle(.menu)
+						.fixedSize(horizontal: true, vertical: false)
+						
+						// MARK: Mins
+						Picker("Mins", selection: $mins) {
+							ForEach(Array(stride(from: 0, through: 55, by: 5)), id: \.self) { min in
+								Text("\(min) mins")
+									.tag(min)
+							}
+						}
+						.pickerStyle(.menu)
+						.fixedSize(horizontal: true, vertical: false)
+						Spacer()
+						
+						
+						
+						// MARK: - Servings
+						Image(systemName: "person.crop.circle")
+						Picker("serving size", selection: $recipe.servings) {
+							Text("Not Set")
+								.tag(nil as Int?)
+							
+							ForEach( 1...20, id: \.self) { number in
+								Text("\(number) servings")
+									.tag(Optional(number))
+								
+							}
+						}
+						.padding(.trailing)
+						
+					}
+					.pickerStyle(.menu)
+					.padding(.bottom)
+					
+					
+					
+					// MARK: - Description
+					TextField("Add Description", text: $recipe.descrip, axis: .vertical)
+						.focused($isFocused)
+						.lineLimit(2...4)
+						.font(.body)
+						.multilineTextAlignment(.leading)
+						.padding(.bottom, 20)
+						.padding(.leading)
+						.padding(.trailing)
+						.submitLabel(.done)
+						.onChange(of: recipe.descrip) { oldValue, newValue in
+							guard isFocused else { return }
+							guard newValue.last == "\n" else { return }
+							
+							recipe.descrip.removeLast()
+							isFocused = false
+						}
+					
+					
+					
+					
+					// MARK: - Ingredients
+					Text("Ingredients")
+						.font(.title3.bold())
+						.padding(.leading)
+						.padding(.bottom, 5)
+					
+					ForEach(recipe.ingredients) { ingredient in
+						IngredientRow(displayText: ingredient.displayText,
+									  notes: ingredient.notes)
+					}
+					.padding(.leading)
+					.padding(.trailing)
+					
+					// ingredient sheet presentation
+					Button(action: {
+						isShowingIngredient.toggle()
+					}) {
+						HStack{
+							Image(systemName: "plus.circle")
+								.font(.caption)
+								.offset(y: 0.2)
+							Text("Add Ingredient")
+						}
+						.foregroundStyle(.gray)
+					}
+					.padding(.leading)
+					.sheet(isPresented: $isShowingIngredient) {
+					} content: {
+						NavigationStack{
+							IngredientEditor{ savedDraft in
+								let newIngredient = Ingredient(
 									name: savedDraft.name,
 									amount: savedDraft.amount,
 									unit: savedDraft.unit,
 									notes: savedDraft.notes
 								)
-                            recipe.ingredients.append(newIngredient)
-                        }
-                            .presentationDetents([.medium])
-                    }
-                }
-                
-                
-                
-                
-                
-                // MARK: - Instructions
-                Text("Instructions")
-                    .font(.title3.bold())
-                    .padding(.leading)
-                    .padding(.top,5)
-					.padding(.bottom, 5)
-                
-				HStack(alignment: .center){
-					Button("Free-form") {
-						isShowingSteps = false
-					}
-					.fontWeight(!isShowingSteps ? .bold : .regular)
-					.underline(!isShowingSteps)
-					
-					.padding(.trailing, 20)
-					
-					Button("Step-by-Step") {
-						isShowingSteps = true
-					}
-					.fontWeight(isShowingSteps ? .bold : .regular)
-					.underline(isShowingSteps)
-				}
-				.frame(maxWidth: .infinity, alignment: .center)
-				.padding(.bottom, 5)
-				//.border(Color.gray, width: 0.5)
-				
-				// Free-form vs Step by Step
-				if !isShowingSteps {
-					ZStack(alignment: .topLeading){
-						
-						TextEditor(text: $recipe.instructions)
-						.font(.body)
-						.focused($instructionIsFocused)
-						.multilineTextAlignment(.leading)
-						
-						
-						if recipe.instructions.isEmpty {
-							Text("Add Instructions")
-								.font(.body)
-								.padding(.top, 8)
-								.padding(.leading, 5)
-								.foregroundStyle(.gray)
-								.allowsHitTesting(false)
-
+								recipe.ingredients.append(newIngredient)
+							}
+							.presentationDetents([.medium])
 						}
 					}
-					.padding(.leading,  12)
-					.padding(.trailing)
-					.padding(.top,-10)
-				
-					Spacer()
 					
-					//  Recipe Step
-				} else if isShowingSteps {
-					ForEach($steps) { $draftStep in
-						Text("Step \(draftStep.step + 1) ")
-							.fontWeight(.bold)
-						TextField("Step Name", text: $draftStep.name)
+					
+					
+					
+					
+					// MARK: - Instructions
+					Text("Instructions")
+						.font(.title3.bold())
+						.padding(.leading)
+						.padding(.top,5)
+						.padding(.bottom, 5)
+					
+					HStack(alignment: .center){
+						Button("Free-form") {
+							isShowingSteps = false
+						}
+						.fontWeight(!isShowingSteps ? .bold : .regular)
+						.underline(!isShowingSteps)
 						
-						TextField ("Step Details", text: $draftStep.details, axis: .vertical)
+						.padding(.trailing, 20)
 						
+						Button("Step-by-Step") {
+							isShowingSteps = true
+						}
+						.fontWeight(isShowingSteps ? .bold : .regular)
+						.underline(isShowingSteps)
 					}
-					.padding(.leading)
-					.padding( .trailing)
+					.frame(maxWidth: .infinity, alignment: .center)
+					.padding(.bottom, 5)
 					
-					Button("Add Step") {
-						steps.append(
-							DraftRecipeStep(
-								name: "",
-								details: "",
-								step: steps.count
+					// Free-form vs Step by Step
+					if !isShowingSteps {
+						ZStack(alignment: .topLeading){
+							
+							TextEditor(text: $recipe.instructions)
+								.font(.body)
+								.focused($instructionIsFocused)
+								.multilineTextAlignment(.leading)
+								.frame(minHeight: 100)
+							
+							
+							if recipe.instructions.isEmpty {
+								Text("Add Instructions")
+									.font(.body)
+									.padding(.top, 8)
+									.padding(.leading, 5)
+									.foregroundStyle(.gray)
+									.allowsHitTesting(false)
+								
+							}
+						}
+						.padding(.leading,  12)
+						.padding(.trailing)
+						.padding(.top,-10)
+						
+						Spacer()
+						
+						//  Recipe Step
+					} else {
+						ForEach($steps) { $draftStep in
+							VStack {
+								Text("Step \(draftStep.step + 1) ")
+									.fontWeight(.bold)
+								
+								TextField("Step Name", text: $draftStep.name)
+								
+								TextField ("Step Details", text: $draftStep.details, axis: .vertical)
+									.focused($focusedStepID, equals: draftStep.id)
+									.onChange(of: draftStep.details) { oldValue, newValue in
+										if focusedStepID == draftStep.id {
+											withAnimation {
+												proxy.scrollTo(draftStep.id, anchor: .center)
+											}
+										}
+									}
+							}
+							.id(draftStep.id)
+						}
+						.padding(.leading)
+						.padding( .trailing)
+						
+						Button("Add Step") {
+							steps.append(
+								DraftRecipeStep(
+									name: "",
+									details: "",
+									step: steps.count
+								)
 							)
-						)
+						}
+						.font(.body)
+						.padding(.top, 1)
+						.padding(.leading)
 					}
-					.font(.body)
-					.padding(.top, 1)
-					.padding(.leading)
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
 				}
-				
-				
-				
-				
-			
-				
-				
-			
-				
-				
-            }
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .navigationBarTitle("New Recipe")
-        .navigationBarTitleDisplayMode(.inline)
+			}
+			.frame(maxWidth: .infinity, alignment: .leading)
+			.navigationBarTitle("New Recipe")
+			.navigationBarTitleDisplayMode(.inline)
+			.scrollDismissesKeyboard(.interactively)
+		}
 		
 		// MARK: - Saving/Cancel actions
         .toolbar {
