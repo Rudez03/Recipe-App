@@ -22,7 +22,11 @@ struct EditRecipe: View {
     // MARK: - Keyboard
     @FocusState private var isFocused: Bool
 	@FocusState private var instructionIsFocused: Bool
-	@FocusState private var focusedStepID: UUID?
+    enum FocusedStepField : Hashable {
+        case stepName(UUID)
+        case stepDetails(UUID)
+    }
+    @FocusState private var focusedStep: FocusedStepField?
     
     // MARK: - Draft Init
     init(recipe: Recipe, onDelete: @escaping () -> Void) {
@@ -223,6 +227,7 @@ struct EditRecipe: View {
 								.font(.body)
 								.focused($instructionIsFocused)
 								.multilineTextAlignment(.leading)
+                                .frame(minHeight: 200)
 							
 							
 							if draft.instructions.isEmpty {
@@ -248,16 +253,25 @@ struct EditRecipe: View {
 								Text("Step \(draftStep.step + 1) ")
 									.fontWeight(.bold)
 								TextField("Step Name", text: $draftStep.name)
+                                    .focused($focusedStep, equals: .stepName(draftStep.id))
+                                    .submitLabel(.next)
 								
 								TextField ("Step Details", text: $draftStep.details, axis: .vertical)
-									.focused($focusedStepID, equals: draftStep.id)
-									.onChange(of: draftStep.details) { oldValue, newValue in
-										if focusedStepID == draftStep.id {
-											withAnimation {
-												proxy.scrollTo(draftStep.id, anchor: .center)
-											}
-										}
-									}
+                                    .focused($focusedStep, equals: .stepDetails(draftStep.id))
+                                    .onChange(of: draftStep.details) { oldValue, newValue in
+                                        if newValue.contains("\n") {
+                                            draftStep.details = newValue.replacingOccurrences(of: "\n", with: "")
+                                            focusedStep = nil
+                                            return
+                                        }
+
+                                        if focusedStep == .stepDetails(draftStep.id) {
+                                            withAnimation {
+                                                proxy.scrollTo(draftStep.id, anchor: .center)
+                                            }
+                                        }
+                                    }
+                                
 							}
 							.id(draftStep.id)
 							
@@ -266,13 +280,19 @@ struct EditRecipe: View {
 						.padding( .trailing)
 						
 						Button("Add Step") {
-							draft.steps.append(
-								DraftRecipeStep(
-									name: "",
-									details: "",
-									step: draft.steps.count
-								)
-							)
+                            let newStep = DraftRecipeStep(
+                                name: "",
+                                details: "",
+                                step: draft.steps.count
+                            )
+							draft.steps.append(newStep)
+                            DispatchQueue.main.async {
+                                withAnimation {
+                                    proxy.scrollTo(newStep.id, anchor: .center)
+                                }
+
+                                focusedStep = .stepName(newStep.id)
+                            }
 						}
 						.font(.body)
 						.padding(.top, 1)
