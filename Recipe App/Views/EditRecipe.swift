@@ -255,9 +255,13 @@ struct EditRecipe: View {
 								TextField("Step Name", text: $draftStep.name)
                                     .focused($focusedStep, equals: .stepName(draftStep.id))
                                     .submitLabel(.next)
+                                    .onSubmit {
+                                        focusedStep = .stepDetails(draftStep.id)
+                                    }
 								
 								TextField ("Step Details", text: $draftStep.details, axis: .vertical)
                                     .focused($focusedStep, equals: .stepDetails(draftStep.id))
+                                    .submitLabel(.done)
                                     .onChange(of: draftStep.details) { oldValue, newValue in
                                         if newValue.contains("\n") {
                                             draftStep.details = newValue.replacingOccurrences(of: "\n", with: "")
