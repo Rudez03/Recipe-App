@@ -234,35 +234,53 @@ struct NewRecipe: View {
 						//  Recipe Step
 					} else {
 						ForEach($steps) { $draftStep in
-							VStack {
-								Text("Step \(draftStep.step + 1) ")
-									.fontWeight(.bold)
-								
-								TextField("Step Name", text: $draftStep.name)
-                                    .focused($focusedStep, equals: .stepName(draftStep.id))
-                                    .submitLabel(.next)
-                                    .onSubmit {
-                                        focusedStep = .stepDetails(draftStep.id)
-                                    }
-								
-								TextField ("Step Details", text: $draftStep.details, axis: .vertical)
-                                    .focused($focusedStep, equals: .stepDetails(draftStep.id))
-                                    .submitLabel(.done)
-                                    .onChange(of: draftStep.details) { oldValue, newValue in
-                                        if newValue.contains("\n") {
-                                            draftStep.details = newValue.replacingOccurrences(of: "\n", with: "")
-                                            focusedStep = nil
-                                            return
+                            HStack(alignment: .top) {
+                                VStack {
+                                    Text("Step \(draftStep.step + 1) ")
+                                        .fontWeight(.bold)
+                                    
+                                    TextField("Step Name", text: $draftStep.name)
+                                        .focused($focusedStep, equals: .stepName(draftStep.id))
+                                        .submitLabel(.next)
+                                        .onSubmit {
+                                            focusedStep = .stepDetails(draftStep.id)
                                         }
-
-                                        if focusedStep == .stepDetails(draftStep.id) {
-                                            withAnimation {
-                                                proxy.scrollTo(draftStep.id, anchor: .center)
+                                    
+                                    TextField ("Step Details", text: $draftStep.details, axis: .vertical)
+                                        .focused($focusedStep, equals: .stepDetails(draftStep.id))
+                                        .submitLabel(.done)
+                                        .onChange(of: draftStep.details) { oldValue, newValue in
+                                            if newValue.contains("\n") {
+                                                draftStep.details = newValue.replacingOccurrences(of: "\n", with: "")
+                                                focusedStep = nil
+                                                return
+                                            }
+                                            
+                                            if focusedStep == .stepDetails(draftStep.id) {
+                                                withAnimation {
+                                                    proxy.scrollTo(draftStep.id, anchor: .center)
+                                                }
                                             }
                                         }
+                                }
+                               // .border(.red)
+                                .id(draftStep.id)
+                                
+                                Button(role: .destructive) {
+                                    steps.removeAll { step in
+                                        step.id == draftStep.id
                                     }
-							}
-							.id(draftStep.id)
+                                    
+                                    for (index, _) in steps.enumerated() {
+                                        steps[index].step = index
+                                    }
+                                    } label: {
+                                        Image(systemName: "minus.circle.fill")
+                                            .foregroundStyle(.red)
+                                    }
+                            }
+                           // .border(.green)
+                            .frame(maxWidth: .infinity)
 						}
 						.padding(.leading)
 						.padding( .trailing)
