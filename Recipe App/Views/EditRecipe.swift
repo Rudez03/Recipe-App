@@ -37,6 +37,7 @@ struct EditRecipe: View {
     
 	//Step by Step view
 	@State private var isShowingSteps: Bool = false
+    @State private var draggedStepID: UUID?
 	
 	
     let recipe: Recipe

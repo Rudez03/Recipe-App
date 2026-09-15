@@ -37,6 +37,7 @@ struct NewRecipe: View {
     
 	//Step by Step view
 	@State private var isShowingSteps: Bool = false
+    @State private var draggedStepID: UUID?
 	
     
     var body: some View {
