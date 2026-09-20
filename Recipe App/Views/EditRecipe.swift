@@ -14,12 +14,12 @@ struct EditRecipe: View {
     @Environment(\.modelContext) private var modelContext
     @State private var draft: DraftRecipe
 	
-	// Ingredient edit sheet
+// Ingredient edit sheet
 	@State private var isShowingIngredient = false
 	
 	@State private var selectedIngredient: DraftIngredient?
     
-    // MARK: - Keyboard
+// MARK: - Keyboard
     @FocusState private var isFocused: Bool
 	@FocusState private var instructionIsFocused: Bool
     enum FocusedStepField : Hashable {
@@ -28,14 +28,14 @@ struct EditRecipe: View {
     }
     @FocusState private var focusedStep: FocusedStepField?
     
-    // MARK: - Draft Init
+// MARK: - Draft Init
     init(recipe: Recipe, onDelete: @escaping () -> Void) {
         self.recipe = recipe
         _draft = .init(initialValue: DraftRecipe(from: recipe))
         self.onDelete = onDelete
     }
     
-	//Step by Step view
+//Step by Step view
 	@State private var isShowingSteps: Bool = false
     @State private var draggedStepID: UUID?
 	
@@ -47,7 +47,7 @@ struct EditRecipe: View {
 		ScrollViewReader{ proxy in
 			ScrollView{
 				VStack(alignment: .leading){
-					// MARK: - Name
+// MARK: - Name
 					TextField("Recipe Name", text: $draft.name, axis: .vertical)
 						.font(.largeTitle)
 						.fontWeight(.semibold)
@@ -66,7 +66,7 @@ struct EditRecipe: View {
 					
 					HStack{
 						
-						// MARK: hrs
+// MARK: hrs
 						Image(systemName: "clock")
 							.padding(.trailing, -5)
 							.padding(.leading)
@@ -80,7 +80,7 @@ struct EditRecipe: View {
 						.pickerStyle(.menu)
 						.fixedSize(horizontal: true, vertical: false)
 						
-						// MARK: Mins
+// MARK: Mins
 						Picker("Mins", selection: $draft.mins) {
 							ForEach(Array(stride(from: 0, through: 55, by: 5)), id: \.self) { min in
 								Text("\(min) mins")
@@ -93,7 +93,7 @@ struct EditRecipe: View {
 						
 						Spacer()
 						
-						// MARK: - Servings
+// MARK: - Servings
 						Image(systemName: "person.crop.circle")
 							.padding(.trailing, -5)
 						Picker("serving size", selection: $draft.servings) {
@@ -112,7 +112,7 @@ struct EditRecipe: View {
 					.pickerStyle(.menu)
 					.padding(.bottom)
 					
-					// MARK: - Description
+// MARK: - Description
 					TextField("Add Description", text: $draft.descrip, axis: .vertical)
 						.font(.body)
 						.multilineTextAlignment(.leading)
@@ -130,7 +130,7 @@ struct EditRecipe: View {
 						}
 					
 					Spacer()
-					// MARK: - Ingredients
+// MARK: - Ingredients
 					Text("Ingredients")
 						.font(.title3.bold())
 						.padding(.leading)
@@ -172,7 +172,7 @@ struct EditRecipe: View {
 						}
 					}
 					
-					// Add Ingredient Button
+// Add Ingredient Button
 					Button(action: {
 						isShowingIngredient.toggle()
 					}) {
@@ -195,7 +195,7 @@ struct EditRecipe: View {
 						}
 					}
 					
-					// MARK: - Instructions
+// MARK: - Instructions
 					Text("Instructions")
 						.font(.title3.bold())
 						.padding(.top,5)
@@ -220,7 +220,7 @@ struct EditRecipe: View {
 					.frame(maxWidth: .infinity, alignment: .center)
 					.padding(.bottom, 5)
 					
-					// Free-form vs Step by Step
+// Free-form
 					if !isShowingSteps {
 						ZStack(alignment: .topLeading){
 							
@@ -247,7 +247,7 @@ struct EditRecipe: View {
 						
 						Spacer()
 						
-						//  Recipe Step
+//  Recipe Step
 					} else if isShowingSteps {
 						ForEach($draft.steps) { $draftStep in
                             HStack {
@@ -321,7 +321,7 @@ struct EditRecipe: View {
 						.padding(.leading)
 					}
 					
-					// MARK: - Delete action
+// MARK: - Delete action
 					Button(role: .destructive, action: {
 						showAlert.toggle()
 						
@@ -355,7 +355,7 @@ struct EditRecipe: View {
 			.frame(maxWidth: .infinity, alignment: .leading)
 			// .padding()
 			.navigationBarTitleDisplayMode(.inline)
-			//MARK: - Save/Cancel actions
+//MARK: - Save/Cancel actions
 			.toolbar {
 				ToolbarItem(placement: .confirmationAction) {
 					Button("Save"){
