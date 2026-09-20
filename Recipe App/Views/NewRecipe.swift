@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UniformTypeIdentifiers
 
 struct NewRecipe: View {
     @State private var recipe = Recipe(name:"")
@@ -13,7 +14,7 @@ struct NewRecipe: View {
     @State var mins = 0
     @Environment(\.dismiss) private var dismiss
 
-	// MARK: - Saving fucntion/Validation
+// MARK: - Saving fucntion/Validation
 	var onSave: (Recipe) -> Void
 	
 	private var canSave: Bool {
@@ -23,7 +24,7 @@ struct NewRecipe: View {
 	}
     @State private var steps: [DraftRecipeStep] = []
 	
-	// Keyboard dismissal
+// Keyboard dismissal
 	@FocusState private var isFocused: Bool
 	@FocusState private var instructionIsFocused: Bool
     enum FocusedStepField : Hashable {
@@ -32,10 +33,10 @@ struct NewRecipe: View {
     }
     @FocusState private var focusedStep: FocusedStepField?
 	
-	// IngredientSheet
+// IngredientSheet
     @State private var isShowingIngredient = false
     
-	//Step by Step view
+//Step by Step view
 	@State private var isShowingSteps: Bool = false
     @State private var draggedStepID: UUID?
 	
@@ -45,7 +46,7 @@ struct NewRecipe: View {
 			ScrollView {
 				VStack(alignment: .leading) {
 					
-					// MARK: - Header
+// MARK: - Header
 					TextField("Recipe Name", text: $recipe.name, axis: .vertical)
 						.focused($isFocused)
 						.font(.largeTitle)
@@ -64,10 +65,10 @@ struct NewRecipe: View {
 					
 					
 					
-					// MARK: - Time and Servings
+// MARK: - Time and Servings
 					HStack{
-						
-						// MARK: hrs
+                        
+// MARK: hrs
 						Image(systemName: "clock")
 							.padding(.leading)
 						
@@ -80,7 +81,7 @@ struct NewRecipe: View {
 						.pickerStyle(.menu)
 						.fixedSize(horizontal: true, vertical: false)
 						
-						// MARK: Mins
+// MARK: Mins
 						Picker("Mins", selection: $mins) {
 							ForEach(Array(stride(from: 0, through: 55, by: 5)), id: \.self) { min in
 								Text("\(min) mins")
@@ -93,7 +94,7 @@ struct NewRecipe: View {
 						
 						
 						
-						// MARK: - Servings
+// MARK: - Servings
 						Image(systemName: "person.crop.circle")
 						Picker("serving size", selection: $recipe.servings) {
 							Text("Not Set")
@@ -113,7 +114,7 @@ struct NewRecipe: View {
 					
 					
 					
-					// MARK: - Description
+// MARK: - Description
 					TextField("Add Description", text: $recipe.descrip, axis: .vertical)
 						.focused($isFocused)
 						.lineLimit(2...4)
@@ -134,7 +135,7 @@ struct NewRecipe: View {
 					
 					
 					
-					// MARK: - Ingredients
+// MARK: - Ingredients
 					Text("Ingredients")
 						.font(.title3.bold())
 						.padding(.leading)
@@ -147,7 +148,7 @@ struct NewRecipe: View {
 					.padding(.leading)
 					.padding(.trailing)
 					
-					// ingredient sheet presentation
+// ingredient sheet presentation
 					Button(action: {
 						isShowingIngredient.toggle()
 					}) {
@@ -180,7 +181,7 @@ struct NewRecipe: View {
 					
 					
 					
-					// MARK: - Instructions
+// MARK: - Instructions
 					Text("Instructions")
 						.font(.title3.bold())
 						.padding(.leading)
@@ -205,7 +206,7 @@ struct NewRecipe: View {
 					.frame(maxWidth: .infinity, alignment: .center)
 					.padding(.bottom, 5)
 					
-					// Free-form vs Step by Step
+// Free-form vs Step by Step
 					if !isShowingSteps {
 						ZStack(alignment: .topLeading){
 							
@@ -232,10 +233,39 @@ struct NewRecipe: View {
 						
 						Spacer()
 						
-						//  Recipe Step
+//  Recipe Step
 					} else {
 						ForEach($steps) { $draftStep in
                             HStack(alignment: .top) {
+								Image(systemName: "line.3.horizontal")
+									.padding(.top,50)
+									.padding(.trailing, 5)
+									.onDrag {
+										draggedStepID = draftStep.id
+										let provider = NSItemProvider()
+                                        
+                                        provider.registerDataRepresentation(
+                                            forTypeIdentifier: UTType.recipeStep.identifier,
+                                            visibility: .ownProcess
+                                        ) { completion in
+                                            completion(Data(), nil)
+                                            return nil
+                                        }
+                                        return provider
+                                    } preview: {
+                                        HStack {
+                                                Image(systemName: "line.3.horizontal")
+
+                                                VStack(alignment: .leading) {
+                                                    Text("Step \(draftStep.step + 1)")
+                                                    Text(draftStep.name)
+                                                    Text(draftStep.details)
+                                                }
+                                            }
+                                            .padding()
+                                    }
+									
+								
                                 VStack {
                                     Text("Step \(draftStep.step + 1) ")
                                         .fontWeight(.bold)
@@ -264,7 +294,6 @@ struct NewRecipe: View {
                                             }
                                         }
                                 }
-                               // .border(.red)
                                 .id(draftStep.id)
                                 
                                 Button(role: .destructive) {
@@ -280,7 +309,14 @@ struct NewRecipe: View {
                                             .foregroundStyle(.red)
                                     }
                             }
-                           // .border(.green)
+							.onDrop(
+								of: [.recipeStep],
+								delegate: StepDropDelegate(
+									steps: $steps,
+									draggedStepID: $draggedStepID,
+									targetStepID: draftStep.id
+								)
+							)
                             .frame(maxWidth: .infinity)
 						}
 						.padding(.leading)
@@ -306,15 +342,6 @@ struct NewRecipe: View {
 						.padding(.leading)
 					}
 					
-					
-					
-					
-					
-					
-					
-					
-					
-					
 				}
 			}
 			.frame(maxWidth: .infinity, alignment: .leading)
@@ -323,7 +350,7 @@ struct NewRecipe: View {
 			.scrollDismissesKeyboard(.interactively)
 		}
 		
-		// MARK: - Saving/Cancel actions
+// MARK: - Saving/Cancel actions
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
                 Button("Save"){
