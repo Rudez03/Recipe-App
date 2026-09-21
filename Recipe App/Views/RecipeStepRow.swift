@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import UniformTypeIdentifiers
+
 
 enum FocusedStepField : Hashable {
     case stepName(UUID)
@@ -24,9 +26,26 @@ struct RecipeStepRow: View {
     var body: some View {
         HStack(alignment: .top) {
             Image(systemName: "line.3.horizontal")
-                .padding(.top,50)
-                .padding(.trailing, 5)
-            
+				.frame(width: 50, height: 50)
+                .contentShape(Capsule())
+                .onDrag {
+                    draggedStepID = draftStep.id
+                    let provider = NSItemProvider()
+
+                    provider.registerDataRepresentation(
+                        forTypeIdentifier: UTType.recipeStep.identifier,
+                        visibility: .ownProcess
+                    ) { completion in
+                        completion(Data(), nil)
+                        return nil
+                    }
+
+                    return provider
+                }preview: {
+					Image(systemName: "line.3.horizontal")
+				}
+				.padding(.top,38)
+			
             VStack {
                 Text("Step \(draftStep.step + 1) ")
                     .fontWeight(.bold)
@@ -57,11 +76,13 @@ struct RecipeStepRow: View {
             
             Button(role: .destructive) {
                 onDelete()
-                } label: {
-                    Image(systemName: "minus.circle.fill")
-                        .foregroundStyle(.red)
-                }
-
+            } label: {
+                Image(systemName: "minus.circle.fill")
+                    .foregroundStyle(.red)
+            }
+            
+        }
+       // .opacity(draggedStepID == draftStep.id ? 0.15 : 1)
     }
 }
 

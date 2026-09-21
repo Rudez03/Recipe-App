@@ -232,7 +232,7 @@ struct NewRecipe: View {
 //  Recipe Step
                     } else {
                         ForEach($steps) { $draftStep in
-                            RecipeStepRow (
+                            RecipeStepRow(
                                 draftStep: $draftStep,
                                 draggedStepID: $draggedStepID,
                                 focusedStep: $focusedStep,
@@ -250,111 +250,35 @@ struct NewRecipe: View {
                                     }
                                 }
                             )
-                            //                            HStack(alignment: .top) {
-                            //								Image(systemName: "line.3.horizontal")
-                            //									.padding(.top,50)
-                            //									.padding(.trailing, 5)
-                            //									.onDrag {
-                            //										draggedStepID = draftStep.id
-                            //										let provider = NSItemProvider()
-                            //
-                            //                                        provider.registerDataRepresentation(
-                            //                                            forTypeIdentifier: UTType.recipeStep.identifier,
-                            //                                            visibility: .ownProcess
-                            //                                        ) { completion in
-                            //                                            completion(Data(), nil)
-                            //                                            return nil
-                            //                                        }
-                            //                                        return provider
-                            //                                    } preview: {
-                            //                                        HStack {
-                            //                                                Image(systemName: "line.3.horizontal")
-                            //
-                            //                                                VStack(alignment: .leading) {
-                            //                                                    Text("Step \(draftStep.step + 1)")
-                            //                                                    Text(draftStep.name)
-                            //                                                    Text(draftStep.details)
-                            //                                                }
-                            //                                            }
-                            //                                            .padding()
-                            //                                    }
-                            //
-                            //
-                            //                                VStack {
-                            //                                    Text("Step \(draftStep.step + 1) ")
-                            //                                        .fontWeight(.bold)
-                            //
-                            //                                    TextField("Step Name", text: $draftStep.name)
-                            //                                        .focused($focusedStep, equals: .stepName(draftStep.id))
-                            //                                        .submitLabel(.next)
-                            //                                        .onSubmit {
-                            //                                            focusedStep = .stepDetails(draftStep.id)
-                            //                                        }
-                            //
-                            //                                    TextField ("Step Details", text: $draftStep.details, axis: .vertical)
-                            //                                        .focused($focusedStep, equals: .stepDetails(draftStep.id))
-                            //                                        .submitLabel(.done)
-                            //                                        .onChange(of: draftStep.details) { oldValue, newValue in
-                            //                                            if newValue.contains("\n") {
-                            //                                                draftStep.details = newValue.replacingOccurrences(of: "\n", with: "")
-                            //                                                focusedStep = nil
-                            //                                                return
-                            //                                            }
-                            //
-                            //                                            if focusedStep == .stepDetails(draftStep.id) {
-                            //                                                withAnimation {
-                            //                                                    proxy.scrollTo(draftStep.id, anchor: .center)
-                            //                                                }
-                            //                                            }
-                            //                                        }
-                            //                                }
-                            //                                .id(draftStep.id)
-                            //
-                            //                                Button(role: .destructive) {
-                            //                                    steps.removeAll { step in
-                            //                                        step.id == draftStep.id
-                            //                                    }
-                            //
-                            //                                    for (index, _) in steps.enumerated() {
-                            //                                        steps[index].step = index
-                            //                                    }
-                            //                                    } label: {
-                            //                                        Image(systemName: "minus.circle.fill")
-                            //                                            .foregroundStyle(.red)
-                            //                                    }
-                            //                            }
-                            //							.onDrop(
-                            //								of: [.recipeStep],
-                            //								delegate: StepDropDelegate(
-                            //									steps: $steps,
-                            //									draggedStepID: $draggedStepID,
-                            //									targetStepID: draftStep.id
-                            //								)
-                            //							)
-                            //                            .frame(maxWidth: .infinity)
-                            //						}
-                            //						.padding(.leading)
-                            //						.padding( .trailing)
-                            
-                            Button("Add Step") {
-                                let newStep = DraftRecipeStep(
-                                    name: "",
-                                    details: "",
-                                    step: steps.count
+                            .onDrop(
+								of: [.recipeStep],
+                                delegate: StepDropDelegate(
+                                    steps: $steps,
+                                    draggedStepID: $draggedStepID,
+                                    targetStepID: draftStep.id
                                 )
-                                steps.append(newStep)
-                                DispatchQueue.main.async {
-                                    withAnimation {
-                                        proxy.scrollTo(newStep.id, anchor: .center)
-                                    }
-                                    
-                                    focusedStep = .stepName(newStep.id)
-                                }
-                            }
-                            .font(.body)
-                            .padding(.top, 1)
-                            .padding(.leading)
+                            )
                         }
+                        .padding(.leading)
+                        .padding(.trailing)
+                        Button("Add Step") {
+                            let newStep = DraftRecipeStep(
+                                name: "",
+                                details: "",
+                                step: steps.count
+                            )
+                            steps.append(newStep)
+                            DispatchQueue.main.async {
+                                withAnimation {
+                                    proxy.scrollTo(newStep.id, anchor: .center)
+                                }
+                                
+                                focusedStep = .stepName(newStep.id)
+                            }
+                        }
+                        .font(.body)
+                        .padding(.top, 1)
+                        .padding(.leading)
                     }
 				}
 			}

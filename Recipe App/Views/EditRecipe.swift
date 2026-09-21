@@ -22,10 +22,7 @@ struct EditRecipe: View {
 // MARK: - Keyboard
     @FocusState private var isFocused: Bool
 	@FocusState private var instructionIsFocused: Bool
-    enum FocusedStepField : Hashable {
-        case stepName(UUID)
-        case stepDetails(UUID)
-    }
+   
     @FocusState private var focusedStep: FocusedStepField?
     
 // MARK: - Draft Init
@@ -250,52 +247,32 @@ struct EditRecipe: View {
 //  Recipe Step
 					} else if isShowingSteps {
 						ForEach($draft.steps) { $draftStep in
-                            HStack {
-                                VStack {
-                                    Text("Step \(draftStep.step + 1) ")
-                                        .fontWeight(.bold)
-                                    TextField("Step Name", text: $draftStep.name)
-                                        .focused($focusedStep, equals: .stepName(draftStep.id))
-                                        .submitLabel(.next)
-                                        .onSubmit {
-                                            focusedStep = .stepDetails(draftStep.id)
-                                        }
-                                    
-                                    TextField ("Step Details", text: $draftStep.details, axis: .vertical)
-                                        .focused($focusedStep, equals: .stepDetails(draftStep.id))
-                                        .submitLabel(.done)
-                                        .onChange(of: draftStep.details) { oldValue, newValue in
-                                            if newValue.contains("\n") {
-                                                draftStep.details = newValue.replacingOccurrences(of: "\n", with: "")
-                                                focusedStep = nil
-                                                return
-                                            }
-                                            
-                                            if focusedStep == .stepDetails(draftStep.id) {
-                                                withAnimation {
-                                                    proxy.scrollTo(draftStep.id, anchor: .center)
-                                                }
-                                            }
-                                        }
-                                    
-                                }
-                                .id(draftStep.id)
-                                
-                                Button(role: .destructive) {
-                                    draft.steps.removeAll { step in
-                                        step.id == draftStep.id
-                                    }
-                                    
-                                    for (index, _) in draft.steps.enumerated() {
-                                        draft.steps[index].step = index
-                                    }
-                                    } label: {
-                                        Image(systemName: "minus.circle.fill")
-                                            .foregroundStyle(.red)
-                                    }
-                            }
-                            .frame(maxWidth: .infinity)
-							
+							RecipeStepRow(
+								draftStep: $draftStep,
+								draggedStepID: $draggedStepID,
+								focusedStep: $focusedStep,
+								onDelete: {
+									draft.steps.removeAll { step in
+										step.id == draftStep.id
+									}
+									for (index, _) in draft.steps.enumerated() {
+										draft.steps[index].step = index
+									}
+								},
+								onRequestScroll: {
+									withAnimation {
+										proxy.scrollTo(draftStep.id, anchor: .center)
+									}
+								}
+							)
+							.onDrop(
+								of: [.recipeStep],
+								delegate: StepDropDelegate(
+									steps: $draft.steps,
+									draggedStepID: $draggedStepID,
+									targetStepID: draftStep.id
+								)
+							)
 						}
 						.padding(.leading)
 						.padding( .trailing)
