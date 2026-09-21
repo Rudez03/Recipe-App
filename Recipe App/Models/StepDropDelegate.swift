@@ -22,7 +22,6 @@ struct StepDropDelegate: DropDelegate {
     var targetStepID: UUID
     
     func performDrop(info: DropInfo) -> Bool {
-		print("PERFORM DROP CALLED")
 		draggedStepID = nil
         return true
     }
@@ -32,7 +31,6 @@ struct StepDropDelegate: DropDelegate {
     }
     
     func dropEntered(info: DropInfo) {
-		print("DROP ENTERED")
         
         guard let fromIndex = steps.firstIndex(where: { step in
             step.id == draggedStepID
@@ -62,10 +60,6 @@ struct StepDropDelegate: DropDelegate {
             }
         }
     }
-	
-	func dropExited(info: DropInfo) {
-		print("DROP EXITED")
-	}
     
 }
 

@@ -82,7 +82,6 @@ struct RecipeStepRow: View {
             }
             
         }
-       // .opacity(draggedStepID == draftStep.id ? 0.15 : 1)
     }
 }
 
