@@ -107,12 +107,12 @@ struct RecipeDetail: View {
                             Text("No Instructions Yet...")
                                 .frame(maxWidth: .infinity, alignment: .center)
                                 .foregroundStyle(.gray)
+                        } else {
+                            Text(recipe.instructions)
+                                .font(.body)
+                                .padding(.bottom, 30)
+                            Spacer()
                         }
-                        
-                        Text(recipe.instructions)
-                            .font(.body)
-                            .padding(.bottom, 30)
-                        Spacer()
                     }
 				
                 }
