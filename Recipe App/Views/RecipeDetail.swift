@@ -78,6 +78,7 @@ struct RecipeDetail: View {
                         Button("Free-form") {
                             isShowingSteps = false
                         }
+                        .disabled(recipe.instructions.isEmpty)
                         .fontWeight(!isShowingSteps ? .bold : .regular)
                         .underline(!isShowingSteps)
                         
@@ -101,7 +102,13 @@ struct RecipeDetail: View {
                         ) { recipeStep in
                             RecipeStepDisplay(recipeStep: recipeStep)
                         }
-                    } else {
+                    }  else {
+                        if recipe.instructions.isEmpty {
+                            Text("No Instructions Yet...")
+                                .frame(maxWidth: .infinity, alignment: .center)
+                                .foregroundStyle(.gray)
+                        }
+                        
                         Text(recipe.instructions)
                             .font(.body)
                             .padding(.bottom, 30)
