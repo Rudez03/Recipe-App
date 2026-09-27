@@ -21,7 +21,7 @@ struct RecipeStepDisplay: View {
 			
             Text(recipeStep.details)
             
-            Rectangle() // or use Divder later 
+            Rectangle() // or use Divider later 
                 .frame(height: 1)
                 .opacity(0.3)
                 
