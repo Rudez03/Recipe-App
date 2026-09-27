@@ -24,63 +24,74 @@ struct RecipeStepRow: View {
     
     
     var body: some View {
-        HStack(alignment: .top) {
-            Image(systemName: "line.3.horizontal")
-				.frame(width: 50, height: 50)
-                .contentShape(Capsule())
-                .onDrag {
-                    draggedStepID = draftStep.id
-                    let provider = NSItemProvider()
+        
+        VStack{
+            HStack(alignment: .top) {
+                Image(systemName: "line.3.horizontal")
+                    .frame(width: 50, height: 50)
+                    .contentShape(Capsule())
+                    .onDrag {
+                        draggedStepID = draftStep.id
+                        let provider = NSItemProvider()
 
-                    provider.registerDataRepresentation(
-                        forTypeIdentifier: UTType.recipeStep.identifier,
-                        visibility: .ownProcess
-                    ) { completion in
-                        completion(Data(), nil)
-                        return nil
-                    }
+                        provider.registerDataRepresentation(
+                            forTypeIdentifier: UTType.recipeStep.identifier,
+                            visibility: .ownProcess
+                        ) { completion in
+                            completion(Data(), nil)
+                            return nil
+                        }
 
-                    return provider
-                }preview: {
-					Image(systemName: "line.3.horizontal")
-				}
-				.padding(.top,38)
-			
-            VStack {
-                Text("Step \(draftStep.step + 1) ")
-                    .fontWeight(.bold)
-                
-                TextField("Step Name", text: $draftStep.name)
-                    .focused($focusedStep, equals: .stepName(draftStep.id))
-                    .submitLabel(.next)
-                    .onSubmit {
-                        focusedStep = .stepDetails(draftStep.id)
+                        return provider
+                    }preview: {
+                        Image(systemName: "line.3.horizontal")
                     }
+                    .padding(.top,38)
                 
-                TextField ("Step Details", text: $draftStep.details, axis: .vertical)
-                    .focused($focusedStep, equals: .stepDetails(draftStep.id))
-                    .submitLabel(.done)
-                    .onChange(of: draftStep.details) { oldValue, newValue in
-                        if newValue.contains("\n") {
-                            draftStep.details = newValue.replacingOccurrences(of: "\n", with: "")
-                            focusedStep = nil
-                            return
+                VStack(alignment: .leading){
+                    Text("Step \(draftStep.step + 1) ")
+                        .fontWeight(.bold)
+                    
+                    TextField("Step Name", text: $draftStep.name)
+                        .focused($focusedStep, equals: .stepName(draftStep.id))
+                        .submitLabel(.next)
+                        .onSubmit {
+                            focusedStep = .stepDetails(draftStep.id)
                         }
-                        
-                        if focusedStep == .stepDetails(draftStep.id) {
-                            onRequestScroll()
+                    
+                    TextField ("Step Details", text: $draftStep.details, axis: .vertical)
+                        .focused($focusedStep, equals: .stepDetails(draftStep.id))
+                        .submitLabel(.done)
+                        .onChange(of: draftStep.details) { oldValue, newValue in
+                            if newValue.contains("\n") {
+                                draftStep.details = newValue.replacingOccurrences(of: "\n", with: "")
+                                focusedStep = nil
+                                return
+                            }
+                            
+                            if focusedStep == .stepDetails(draftStep.id) {
+                                onRequestScroll()
+                            }
                         }
-                    }
+                    
+
+                    
+                    
+                }
+                .id(draftStep.id)
+                
+                Button(role: .destructive) {
+                    onDelete()
+                } label: {
+                    Image(systemName: "minus.circle.fill")
+                        .foregroundStyle(.red)
+                }
+                
             }
-            .id(draftStep.id)
             
-            Button(role: .destructive) {
-                onDelete()
-            } label: {
-                Image(systemName: "minus.circle.fill")
-                    .foregroundStyle(.red)
-            }
-            
+            Rectangle()
+                .frame(height: 1)
+                .opacity(0.3)
         }
     }
 }

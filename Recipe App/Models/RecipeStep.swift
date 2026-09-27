@@ -11,16 +11,16 @@ import SwiftData
 @Model
 class RecipeStep: Identifiable {
 	var id: UUID = UUID()
+    var step: Int
 	var name: String
 	var details: String
-	var step: Int
 	
 	var recipe: Recipe? = nil
 	
-	init(name: String, details: String = "", step: Int) {
+	init(step: Int, name: String, details: String = "") {
+        self.step = step
 		self.name = name
 		self.details = details
-		self.step = step
 	}
 	
 }

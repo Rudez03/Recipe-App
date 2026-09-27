@@ -10,6 +10,8 @@ import SwiftUI
 struct RecipeDetail: View {
 	@State private var isEdit = false
     @Environment(\.dismiss) private var dismiss
+	
+	@State private var isShowingSteps = false
     
     let recipe: Recipe
     
@@ -17,14 +19,14 @@ struct RecipeDetail: View {
             ScrollView {
                 VStack(alignment: .leading){
                     
-                    // MARK: - Header
+// MARK: - Header
                     Text(recipe.name)
                         .font(.largeTitle)
                         .fontWeight(.semibold)
                         .padding(.top, 20)
                         .padding(.bottom, 5)
                     
-                    // MARK: - Time and Servings
+// MARK: - Time and Servings
                     HStack{
                         Label("\(recipe.displayTime)", systemImage: "clock")
                         Spacer()
@@ -45,15 +47,14 @@ struct RecipeDetail: View {
                     }
                     .padding(.bottom)
                     
-                    // MARK: - Description
+// MARK: - Description
                     Text(recipe.descrip)
                         .font(.body)
                         //.frame(maxWidth: .infinity)
                         .multilineTextAlignment(.leading)
                         .padding(.bottom, 30)
                     
-                    
-                    // MARK: - Ingredients
+// MARK: - Ingredients
                     Text("Ingredients")
                         .font(.title3.bold())
                         //.underline()
@@ -66,20 +67,46 @@ struct RecipeDetail: View {
                     }
                     
                     
-                    // MARK: - Instructions
+// MARK: - Instructions
                     Text("Instructions")
                         .font(.title3.bold())
                        // .underline()
                         .padding(.top,5)
                         .padding(.bottom, 5)
+                    
+                    HStack(alignment: .center){
+                        Button("Free-form") {
+                            isShowingSteps = false
+                        }
+                        .fontWeight(!isShowingSteps ? .bold : .regular)
+                        .underline(!isShowingSteps)
+                        
+                        .padding(.trailing, 20)
+                        
+                        Button("Step-by-Step") {
+                            isShowingSteps = true
+                        }
+                        .fontWeight(isShowingSteps ? .bold : .regular)
+                        .underline(isShowingSteps)
+                    }
+                    .frame(maxWidth: .infinity, alignment: .center)
+                    .padding(.bottom, 5)
 
+                    if isShowingSteps {
+                        ForEach(
+                        recipe.steps.sorted() { firstStep, secondStep in
+                            firstStep.step < secondStep.step
+                        }
+                        ) { recipeStep in
+							RecipeStepDisplay(step: recipeStep.step, name: recipeStep.name, details: recipeStep.details)
+                        }
+                    } else {
+                        Text(recipe.instructions)
+                            .font(.body)
+                            .padding(.bottom, 30)
+                        Spacer()
+                    }
 				
-					Text(recipe.instructions)
-						.font(.body)
-						.padding(.bottom, 30)
-                    Spacer()
-                    
-                    
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -88,7 +115,7 @@ struct RecipeDetail: View {
         //.navigationTitle(recipe.name)
         .navigationBarTitleDisplayMode(.inline)
 		
-		// MARK: Edit
+// MARK: Edit
 		.toolbar {
 			ToolbarItem {
 				Button(action: {
@@ -231,7 +258,10 @@ struct RecipeDetail: View {
             7. Add the cooked pasta directly into the sauce and toss until every noodle is coated.
 
             8. Slice the rested chicken and place it over the pasta before serving with additional parmesan and freshly cracked black pepper.
-            """
+            """,
+            
+            steps: [ RecipeStep( step: 0, name:"Mix", details: "mix thoroughly")
+                    ]
         )
                      
         )

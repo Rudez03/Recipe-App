@@ -183,7 +183,7 @@ struct NewRecipe: View {
 						.padding(.leading)
 						.padding(.top,5)
 						.padding(.bottom, 5)
-					
+// Instuctions Selector
 					HStack(alignment: .center){
 						Button("Free-form") {
 							isShowingSteps = false
@@ -295,9 +295,9 @@ struct NewRecipe: View {
                     recipe.totalMins = (hours * 60) + mins
                     recipe.steps = steps.map { draftStep in
                         RecipeStep(
+                            step: draftStep.step,
                             name: draftStep.name,
-                            details: draftStep.details,
-                            step: draftStep.step
+                            details: draftStep.details
                             )
                     }
                     onSave(recipe)

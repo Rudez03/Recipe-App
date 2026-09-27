@@ -414,9 +414,9 @@ private extension EditRecipe {
 			}
 			else {
 				let newStep = RecipeStep(
+                    step: draftStep.step,
 					name: draftStep.name,
-					details: draftStep.details,
-					step: draftStep.step
+					details: draftStep.details
 				)
 				recipe.steps.append(newStep)
 			}
