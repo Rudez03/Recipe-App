@@ -40,7 +40,7 @@ struct RecipeDetail: View {
                         }
                         else {
                             Label("Serving Size", systemImage: "person.crop.circle")
-								//.padding(5)
+
 							
 								
 						}
@@ -50,14 +50,13 @@ struct RecipeDetail: View {
 // MARK: - Description
                     Text(recipe.descrip)
                         .font(.body)
-                        //.frame(maxWidth: .infinity)
                         .multilineTextAlignment(.leading)
                         .padding(.bottom, 30)
                     
 // MARK: - Ingredients
                     Text("Ingredients")
                         .font(.title3.bold())
-                        //.underline()
+
                         .padding(.bottom, 5)
                     
                     
@@ -137,7 +136,7 @@ struct RecipeDetail: View {
 					HStack{
 						Text("Edit")
 					}
-					// .foregroundStyle(.black)
+
 				}
 				.fullScreenCover(isPresented: $isEdit) {
 				} content: {

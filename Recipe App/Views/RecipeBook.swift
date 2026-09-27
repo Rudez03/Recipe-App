@@ -77,7 +77,6 @@ struct RecipeBook: View {
                         HStack{
                             Image(systemName: "plus")
                         }
-                       // .foregroundStyle(.black)
                     }
                     .fullScreenCover(isPresented: $isShowingRecipe) {
                     } content: {

@@ -21,11 +21,10 @@ struct RecipeStepDisplay: View {
 			
             Text(recipeStep.details)
             
-            Rectangle()
+            Rectangle() // or use Divder later 
                 .frame(height: 1)
                 .opacity(0.3)
                 
-           // Divider()
 		}
         .padding(.vertical)
     }
