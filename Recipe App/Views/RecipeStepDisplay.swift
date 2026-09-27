@@ -8,20 +8,18 @@
 import SwiftUI
 
 struct RecipeStepDisplay: View {
-	let step: Int
-	let name: String
-	let details: String
+    let recipeStep: RecipeStep
 	
     var body: some View {
 		VStack(alignment: .leading, spacing: 10){
-			Text("Step \(step + 1)")
+            Text("Step \(recipeStep.step + 1)")
 				.fontWeight(.bold)
                 .underline()
                 
 			
-			Text(name)
+            Text(recipeStep.name)
 			
-			Text(details)
+            Text(recipeStep.details)
             
             Rectangle()
                 .frame(height: 1)
@@ -34,5 +32,6 @@ struct RecipeStepDisplay: View {
 }
 
 #Preview {
-	RecipeStepDisplay(step: 0, name:"Mix", details: "mix thoroughly")
+    RecipeStepDisplay(recipeStep: RecipeStep(step: 0, name:"Mix", details: "mix thoroughly"))
 }
+

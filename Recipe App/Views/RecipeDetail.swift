@@ -86,6 +86,7 @@ struct RecipeDetail: View {
                         Button("Step-by-Step") {
                             isShowingSteps = true
                         }
+                        .disabled(recipe.steps.isEmpty)
                         .fontWeight(isShowingSteps ? .bold : .regular)
                         .underline(isShowingSteps)
                     }
@@ -98,7 +99,7 @@ struct RecipeDetail: View {
                             firstStep.step < secondStep.step
                         }
                         ) { recipeStep in
-							RecipeStepDisplay(step: recipeStep.step, name: recipeStep.name, details: recipeStep.details)
+                            RecipeStepDisplay(recipeStep: recipeStep)
                         }
                     } else {
                         Text(recipe.instructions)
@@ -107,6 +108,11 @@ struct RecipeDetail: View {
                         Spacer()
                     }
 				
+                }
+            }
+            .onAppear {
+                if recipe.instructions.isEmpty && !recipe.steps.isEmpty {
+                    isShowingSteps = true
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
