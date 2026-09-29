@@ -348,8 +348,8 @@ But every feature should answer one question:
 | 2 | Create Recipes | ✅ Complete |
 | 3 | Persistence | ✅ Complete |
 | 4 | Edit & Delete | ✅ Complete |
-| 5 | Instructions | 🔜 Next |
-| 6 | Categories & Organization | 📋 Planned |
+| 5 | Instructions | ✅ Complete |
+| 6 | Categories & Organization | 🔜 Next |
 | 7 | Recipe Scaling | 📋 Planned |
 | 8 | Favorites & Quick Access | 📋 Planned |
 | 9 | Shopping List | 📋 Planned |
