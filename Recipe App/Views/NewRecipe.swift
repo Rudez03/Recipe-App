@@ -32,9 +32,12 @@ struct NewRecipe: View {
 // IngredientSheet
     @State private var isShowingIngredient = false
     
-//Step by Step view
+// Step by Step view
 	@State private var isShowingSteps: Bool = false
     @State private var draggedStepID: UUID?
+	
+// Recipe Categgory
+	@State private var selectedCategories: Set<RecipeCategory> = []
 	
     
     var body: some View {
@@ -108,6 +111,50 @@ struct NewRecipe: View {
 					.pickerStyle(.menu)
 					.padding(.bottom)
 					
+					
+// MARK: - Categories
+                    FlowLayout(spacing: 8) {
+                        ForEach(
+                            selectedCategories.sorted { $0.displayName < $1.displayName },
+                            id: \.self
+                        ) { category in
+                            Text(category.displayName)
+                                .fixedSize(horizontal: true, vertical: false)
+                                .padding(.horizontal, 12)
+                                .padding(.vertical,6)
+                                .glassEffect(
+                                    .clear.tint(category.tagColor.opacity(0.8)),
+                                    in: Capsule()
+                                )
+                        }
+                    }
+                    .padding(.horizontal)
+                    
+					Menu {
+						ForEach(RecipeCategory.allCases, id: \.self) { category in
+							Toggle(category.displayName, isOn: Binding(
+								get: {
+									selectedCategories.contains(category)
+								},
+								set: { isSelected in
+									// If true, insert category.
+									// Otherwise, remove category.
+									if isSelected {
+										selectedCategories.insert(category)
+									} else {
+										selectedCategories.remove(category)
+									}
+								}
+							))
+							
+						}
+					} label: {
+						Text("Categories")
+					}
+					.menuActionDismissBehavior(.disabled)
+                    .padding(.horizontal)
+                    
+
 					
 					
 // MARK: - Description
@@ -300,6 +347,7 @@ struct NewRecipe: View {
                             details: draftStep.details
                             )
                     }
+                    recipe.categories = selectedCategories.sorted { $0.displayName < $1.displayName }
                     onSave(recipe)
                     dismiss()
                 }

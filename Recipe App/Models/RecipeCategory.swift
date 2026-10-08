@@ -6,7 +6,7 @@
 //
 
 import Foundation
-
+import SwiftUI
 
 enum RecipeCategory: String, CaseIterable, Codable, Hashable {
 	case breakfast
@@ -26,6 +26,18 @@ enum RecipeCategory: String, CaseIterable, Codable, Hashable {
             case .snacks: return "Snacks"
             case .desserts: return "Desserts"
             case .drinks: return "Drinks"
+        }
+    }
+    
+    var tagColor: Color {
+        switch self {
+            case .breakfast: return .blue
+            case .lunch: return .green
+            case .dinner: return .red
+            case .appetizers: return .orange
+            case .snacks: return .purple
+            case .desserts: return .pink
+            case .drinks: return .cyan
         }
     }
 }
