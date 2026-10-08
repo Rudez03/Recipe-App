@@ -26,6 +26,7 @@ struct RecipeDetail: View {
                         .padding(.top, 20)
                         .padding(.bottom, 5)
                     
+                    
 // MARK: - Time and Servings
                     HStack{
                         Label("\(recipe.displayTime)", systemImage: "clock")
@@ -45,13 +46,36 @@ struct RecipeDetail: View {
 								
 						}
                     }
-                    .padding(.bottom)
+                    .padding(.bottom, 3)
+
+                    
+                    if !recipe.categories.isEmpty {
+                        FlowLayout(spacing: 8) {
+                            ForEach(
+                                recipe.categories.sorted { $0.displayName < $1.displayName },
+                                id: \.self
+                            ) { category in
+                                Text(category.displayName)
+                                    .font(.subheadline)
+                                    .fixedSize(horizontal: true, vertical: false)
+                                    .padding(.horizontal, 8)
+                                    .padding(.vertical,4)
+                                    .glassEffect(
+                                        .clear.tint(category.tagColor.opacity(0.8)),
+                                        in: Capsule()
+                                    )
+                            }
+                        }
+                        .padding(.horizontal)
+                    }
                     
 // MARK: - Description
-                    Text(recipe.descrip)
-                        .font(.body)
-                        .multilineTextAlignment(.leading)
-                        .padding(.bottom, 30)
+                    if !recipe.descrip.isEmpty {
+                        Text(recipe.descrip)
+                            .font(.body)
+                            .multilineTextAlignment(.leading)
+                            .padding(.bottom, 30)
+                    }
                     
 // MARK: - Ingredients
                     Text("Ingredients")
@@ -115,6 +139,7 @@ struct RecipeDetail: View {
                     }
 				
                 }
+                .padding()
             }
             .onAppear {
                 if recipe.instructions.isEmpty && !recipe.steps.isEmpty {
@@ -123,7 +148,7 @@ struct RecipeDetail: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             
-            .padding()
+            //.padding()
         //.navigationTitle(recipe.name)
         .navigationBarTitleDisplayMode(.inline)
 		
@@ -158,6 +183,7 @@ struct RecipeDetail: View {
         RecipeDetail(recipe: Recipe(
             name: "Roasted Garlic Parmesan Chicken Alfredo with Sun-Dried Tomatoes and Fresh Basil",
             descrip: "A rich and creamy homemade Alfredo tossed with grilled chicken, roasted garlic, sun-dried tomatoes, fresh basil, and parmesan cheese. Perfect for testing long text wrapping and overall layout spacing within the recipe detail screen.",
+            categories: [.dinner],
             ingredients: [
 
                 Ingredient(

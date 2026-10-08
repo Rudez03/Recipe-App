@@ -25,21 +25,21 @@ class Recipe: Identifiable {
     var totalMins: Int
     var servings: Int?
     var icon: String?
-    var categories: [RecipeCategory]
+    var categories: [RecipeCategory] = []
     // Instructions: freeform and step by step
     var instructions: String
 	@Relationship(deleteRule: .cascade, inverse: \RecipeStep.recipe)
 	var steps: [RecipeStep]
 	
-    init(name: String, descrip: String = "", ingredients: [Ingredient] = [], prepTime: String = "", totalMins: Int = 0, servings: Int? = nil, icon: String? = nil, categories: [RecipeCategory] = [], instructions: String = "", steps: [RecipeStep] = []) {
+    init(name: String, descrip: String = "", categories: [RecipeCategory] = [], ingredients: [Ingredient] = [], prepTime: String = "", totalMins: Int = 0, servings: Int? = nil, icon: String? = nil,  instructions: String = "", steps: [RecipeStep] = []) {
 		self.name = name
 		self.descrip = descrip
+        self.categories = categories
 		self.ingredients = ingredients
 		self.prepTime = prepTime
 		self.totalMins = totalMins
 		self.servings = servings
 		self.icon = icon
-        self.categories = categories
 		self.instructions = instructions
 		self.steps = steps
 		
