@@ -13,6 +13,7 @@ import Foundation
 struct DraftRecipe {
     var name: String
     var descrip: String
+    var categories: Set<RecipeCategory>
     var instructions: String
     var hours: Int
     var mins: Int
@@ -25,6 +26,7 @@ struct DraftRecipe {
     init(from recipe: Recipe) {
         self.name = recipe.name
         self.descrip = recipe.descrip
+        self.categories = Set(recipe.categories)
         self.instructions = recipe.instructions
         self.hours = recipe.totalMins / 60
         self.mins = recipe.totalMins % 60

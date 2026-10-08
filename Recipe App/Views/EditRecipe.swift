@@ -108,6 +108,46 @@ struct EditRecipe: View {
 					}
 					.pickerStyle(.menu)
 					.padding(.bottom)
+                    
+// MARK: - Categories
+                    FlowLayout(spacing: 8) {
+                        ForEach(
+                            draft.categories.sorted { $0.displayName < $1.displayName },
+                            id: \.self
+                        ) { category in
+                            Text(category.displayName)
+                                .fixedSize(horizontal: true, vertical: false)
+                                .padding(.horizontal, 12)
+                                .padding(.vertical,6)
+                                .glassEffect(
+                                    .clear.tint(category.tagColor.opacity(0.8)),
+                                    in: Capsule()
+                                )
+                        }
+                    }
+                    .padding(.horizontal)
+                    
+                    Menu {
+                        ForEach(RecipeCategory.allCases, id: \.self) { category in
+                            Toggle(category.displayName, isOn: Binding(
+                                get: {
+                                    draft.categories.contains(category)
+                                },
+                                set: { isSelected in
+                                    if isSelected {
+                                        draft.categories.insert(category)
+                                    } else {
+                                        draft.categories.remove(category)
+                                    }
+                                }
+                            ))
+                            
+                        }
+                    } label: {
+                        Text("Categories")
+                    }
+                    .menuActionDismissBehavior(.disabled)
+                    .padding(.horizontal)
 					
 // MARK: - Description
 					TextField("Add Description", text: $draft.descrip, axis: .vertical)
@@ -357,6 +397,7 @@ private extension EditRecipe {
         recipe.name = draft.name
         recipe.totalMins = (draft.hours * 60) + draft.mins
         recipe.descrip = draft.descrip
+        recipe.categories = draft.categories.sorted { $0.displayName < $1.displayName}
         recipe.servings = draft.servings
         recipe.instructions = draft.instructions
         
