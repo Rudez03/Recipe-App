@@ -37,6 +37,9 @@ struct RecipeBook: View {
             }
             return matchesCategory && matchesSearch
         }
+        .sorted {
+            $0.name.localizedStandardCompare($1.name) == .orderedAscending
+        }
     }
     
     var body: some View {
