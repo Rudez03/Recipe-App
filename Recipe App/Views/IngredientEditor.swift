@@ -27,7 +27,7 @@ struct IngredientEditor: View {
 			.isEmpty
 	}
 	
-	// MARK: - Delete function/validation
+	//MARK: - Delete function/validation
 	var onDelete: (() -> Void)?
 	
 	//MARK: - Keyboard Focus cases
@@ -38,7 +38,23 @@ struct IngredientEditor: View {
 	@FocusState private var focusedField: Field?
 	@FocusState private var isFocused: Bool
 	
-	
+	//MARK: - Add Fraction
+	private func addFrac (_ fraction: String) {
+		var parts = draftIngredient.amount.split(separator: " ")
+		
+		if parts.isEmpty {
+			draftIngredient.amount = fraction
+			return
+		}
+		
+		if let lastPart = parts.last {
+			if lastPart.contains("/") {
+				parts.removeLast()
+			}
+		}
+		parts.append(Substring(fraction))
+		draftIngredient.amount = parts.joined(separator: " ")
+	}
 	
 	
     var body: some View {
@@ -77,13 +93,60 @@ struct IngredientEditor: View {
 						HStack{
 							// Amount
 							TextField("0", text: $draftIngredient.amount)
+								.keyboardType(.decimalPad)
+								.focused($focusedField, equals: .amount)
 								.font(.title3)
 								.frame(width: 60)
-								.focused($focusedField, equals: .amount)
-									.submitLabel(.done)
-									.onSubmit {
-										focusedField = nil
+								.toolbar {
+									ToolbarItemGroup(placement: .keyboard) {
+										if focusedField == .amount {
+											Group {
+												Button {
+													addFrac("1/8")
+												} label: {
+													Text("1/8")
+												}
+												Button {
+													addFrac("1/4")
+												} label: {
+													Text("1/4")
+												}
+												
+												Button {
+													addFrac("1/3")
+												} label: {
+													Text("1/3")
+												}
+												
+												Button {
+													addFrac("1/2")
+												} label: {
+													Text("1/2")
+												}
+												
+												Button {
+													addFrac("2/3")
+												} label: {
+													Text("2/3")
+												}
+												
+												Button {
+													addFrac("3/4")
+												} label: {
+													Text("3/4")
+												}
+											}
+											.disabled(draftIngredient.amount.contains("."))
+											
+											Button {
+												focusedField = nil
+											} label: {
+												Image(systemName: "checkmark.circle.fill")
+											}
+										}
 									}
+                                    
+								}
 							
 							Divider()
 								.frame(height: 30)
@@ -110,12 +173,15 @@ struct IngredientEditor: View {
 				
 				// MARK: - Notes Optional
 				TextField("Add Notes", text: $draftIngredient.notes, axis: .vertical)
-					.lineLimit(2...4)
+					.lineLimit(3...5)
 					.font(.body)
-					.multilineTextAlignment(.leading)
-					.padding(.bottom, 20)
-					.padding(.leading,20)
-					.padding(.trailing,10)
+					.padding(12)
+					.frame(maxWidth: .infinity, alignment: .leading)
+					.background {
+						RoundedRectangle(cornerRadius: 16)
+							.fill(.gray.opacity(0.2))
+					}
+					.padding(.horizontal)
 					.focused($isFocused)
 					.submitLabel(.done)
 					.onChange(of: draftIngredient.notes) { oldValue, newValue in

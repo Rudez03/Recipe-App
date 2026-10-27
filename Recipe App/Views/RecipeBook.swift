@@ -118,17 +118,17 @@ struct RecipeBook: View {
                                 Image(systemName: "plus")
                             }
                         }
-                        .fullScreenCover(isPresented: $isShowingRecipe) {
-                        } content: {
-                            NavigationStack {
-                                NewRecipe{ savedRecipe in
-                                    modelContext.insert(savedRecipe)
-                                }
-                            }
-                        }
                     }
                 }
             }
+			.fullScreenCover(isPresented: $isShowingRecipe) {
+			} content: {
+				NavigationStack {
+					NewRecipe{ savedRecipe in
+						modelContext.insert(savedRecipe)
+					}
+				}
+			}
         }
      
 

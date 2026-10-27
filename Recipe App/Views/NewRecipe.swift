@@ -13,6 +13,8 @@ struct NewRecipe: View {
     @State var hours = 0
     @State var mins = 0
     @Environment(\.dismiss) private var dismiss
+	
+	@State private var forceLayoutRender = false 
 
 // MARK: - Saving fucntion/Validation
 	var onSave: (Recipe) -> Void
@@ -216,8 +218,10 @@ struct NewRecipe: View {
 								)
 								recipe.ingredients.append(newIngredient)
 							}
-							.presentationDetents([.medium])
 						}
+						.presentationDetents([.medium])
+						.presentationBackground(Color(uiColor: .systemBackground))
+						
 					}
 					
 					
