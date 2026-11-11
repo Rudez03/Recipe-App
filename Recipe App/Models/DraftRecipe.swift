@@ -48,6 +48,7 @@ struct DraftIngredient: Identifiable {
     var id: UUID
     var name: String
     var amount: String
+	var range: String?
     var unit: IngredientUnit
     var notes: String
     
@@ -55,6 +56,7 @@ struct DraftIngredient: Identifiable {
         self.id = ingredient.id
         self.name = ingredient.name
         self.amount = ingredient.amount
+		self.range = ingredient.range
         self.unit = ingredient.unit
         self.notes = ingredient.notes
     }
@@ -63,6 +65,7 @@ struct DraftIngredient: Identifiable {
         self.id = UUID()
         self.name = name
         self.amount = ""
+		self.range = nil
         self.unit = .none
         self.notes = ""
     }

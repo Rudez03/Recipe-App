@@ -220,8 +220,6 @@ struct NewRecipe: View {
 							}
 						}
 						.presentationDetents([.medium])
-						.presentationBackground(Color(uiColor: .systemBackground))
-						
 					}
 					
 					

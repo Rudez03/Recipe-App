@@ -8,8 +8,22 @@
 import Foundation
 
 struct IngredientConversion {
+    
+    private static let fractionSymbols: [String: String] = [
+        "⅛": "1/8",
+        "¼": "1/4",
+        "⅓": "1/3",
+        "½": "1/2",
+        "⅔": "2/3",
+        "¾": "3/4"
+    ]
 	static func parse(_ amount: String) -> Double? {
-		let trimmedAmount = amount.trimmingCharacters(in: .whitespacesAndNewlines)
+		var trimmedAmount = amount.trimmingCharacters(in: .whitespacesAndNewlines)
+		for (symbol, fraction) in fractionSymbols {
+			let replacement = trimmedAmount.replacingOccurrences(of: symbol, with: " " + fraction)
+			trimmedAmount = replacement
+		}
+		trimmedAmount = trimmedAmount.trimmingCharacters(in: .whitespacesAndNewlines)
 		let parts: [Substring]
 		let whole: Double
 		if let number = Double(trimmedAmount) {

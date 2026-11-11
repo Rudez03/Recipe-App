@@ -34,6 +34,7 @@ struct IngredientEditor: View {
 	enum Field {
 		case name
 		case amount
+        case range
 	}
 	@FocusState private var focusedField: Field?
 	@FocusState private var isFocused: Bool
@@ -56,6 +57,8 @@ struct IngredientEditor: View {
 		draftIngredient.amount = parts.joined(separator: " ")
 	}
 	
+	
+	@State private var isShowingRange = false
 	
     var body: some View {
         ScrollView {
@@ -84,19 +87,20 @@ struct IngredientEditor: View {
 				
 				// MARK: - Amount/Unit
 				HStack{
-					ZStack{
-						Capsule()
-							.fill(Color.gray.opacity(0.2))
-							.frame(height: 40)
-							.frame(width:300 )
-							
+//					ZStack{
+//						Capsule()
+//							.fill(Color.gray.opacity(0.2))
+//							.frame(height: 40)
+//							.frame(width:300 )
+//							
 						HStack{
 							// Amount
 							TextField("0", text: $draftIngredient.amount)
+                                .padding(.leading)
 								.keyboardType(.decimalPad)
 								.focused($focusedField, equals: .amount)
 								.font(.title3)
-								.frame(width: 60)
+								.frame(width: 80)
 								.toolbar {
 									ToolbarItemGroup(placement: .keyboard) {
 										if focusedField == .amount {
@@ -148,6 +152,75 @@ struct IngredientEditor: View {
                                     
 								}
 							
+							// Amount Range optional
+							if isShowingRange == true {
+								Text("to")
+                                    .padding(.horizontal,5)
+								
+								TextField("0", text: Binding(
+									get: {
+										draftIngredient.range ?? ""
+									},
+									set: { newText in
+										draftIngredient.range = newText
+									}
+								))
+                                .focused($focusedField, equals: .range)
+                                .padding(.leading)
+                                .frame(width: 80)
+                                .keyboardType(.decimalPad)
+                                .toolbar {
+                                    ToolbarItemGroup(placement: .keyboard) {
+                                        if focusedField == .range {
+                                            Group {
+                                                Button {
+                                                    addFrac("1/8")
+                                                } label: {
+                                                    Text("1/8")
+                                                }
+                                                Button {
+                                                    addFrac("1/4")
+                                                } label: {
+                                                    Text("1/4")
+                                                }
+                                                
+                                                Button {
+                                                    addFrac("1/3")
+                                                } label: {
+                                                    Text("1/3")
+                                                }
+                                                
+                                                Button {
+                                                    addFrac("1/2")
+                                                } label: {
+                                                    Text("1/2")
+                                                }
+                                                
+                                                Button {
+                                                    addFrac("2/3")
+                                                } label: {
+                                                    Text("2/3")
+                                                }
+                                                
+                                                Button {
+                                                    addFrac("3/4")
+                                                } label: {
+                                                    Text("3/4")
+                                                }
+                                            }
+                                            .disabled(draftIngredient.range.contains("."))
+                                            
+                                            Button {
+                                                focusedField = nil
+                                            } label: {
+                                                Image(systemName: "checkmark.circle.fill")
+                                            }
+                                        }
+                                    }
+                                    
+                                }
+							}
+							
 							Divider()
 								.frame(height: 30)
 								.frame(width: 50)
@@ -161,14 +234,25 @@ struct IngredientEditor: View {
                                     
                                 }
                             }
+                            .frame(width: 80)
 						}
-					}
-					//.frame(width: 150 )
-					Spacer()
 				}
+                .background {
+                    Capsule()
+                        .fill(Color.gray.opacity(0.2))
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
 				.padding(.leading)
 				.padding(.trailing)
-				.padding(.bottom)
+                
+				Button {
+					isShowingRange = true
+				} label: {
+					Text("Range")
+				}
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.leading)
+				//.padding(.bottom)
 				
 				
 				// MARK: - Notes Optional
@@ -211,6 +295,7 @@ struct IngredientEditor: View {
 				}
 			}
         }
+		.background(Color(uiColor: .systemBackground))
         .navigationBarTitle("Editor Screen")
         .navigationBarTitleDisplayMode(.inline)
 		

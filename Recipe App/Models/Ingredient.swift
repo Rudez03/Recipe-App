@@ -57,14 +57,16 @@ class Ingredient: Identifiable {
 	// MARK: - Ingredient data
     var name: String
     var amount: String
+	var range: String? = nil
     var unit: IngredientUnit
     var notes: String
     
     var recipe: Recipe? = nil
     
-	init(name: String, amount: String = "", unit: IngredientUnit = IngredientUnit.none, notes: String = "") {
+	init(name: String, amount: String = "", range: String? = nil, unit: IngredientUnit = IngredientUnit.none, notes: String = "") {
 		self.name = name
 		self.amount = amount
+		self.range = range
 		self.unit = unit
 		self.notes = notes
 	}
