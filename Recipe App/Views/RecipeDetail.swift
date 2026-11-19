@@ -12,8 +12,19 @@ struct RecipeDetail: View {
     @Environment(\.dismiss) private var dismiss
 	
 	@State private var isShowingSteps = false
+    @State private var selectedServings: Int? = nil
     
     let recipe: Recipe
+    
+//MARK: - Scaling
+    private var scaleFactor : Double? {
+        guard let original = recipe.servings, original > 0 else {
+            return nil
+        }
+		let target = selectedServings ?? original
+		guard target > 0 else { return nil }
+		return Double(target) / Double(original)
+    }
     
     var body: some View {
             ScrollView {

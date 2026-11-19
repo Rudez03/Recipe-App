@@ -71,12 +71,17 @@ struct DraftIngredient: Identifiable {
     }
     
     var displayText: String {
+        var quantity = amount
+        
         if amount.isEmpty != true  {
+            if let upper = range, !upper.isEmpty{
+                quantity += " - \(upper)"
+            }
             if unit != .none{
-                return "\(amount) \(unit.displayName) \(name)"
+                return "\(quantity) \(unit.displayName) \(name)"
             }
             else {
-                return "\(amount) \(name)"
+                return "\(quantity) \(name)"
             }
         }
         else {

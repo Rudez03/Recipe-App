@@ -13,6 +13,7 @@ struct IngredientEditor: View {
     
 	init(draftIngredient: DraftIngredient = DraftIngredient(), onSave: @escaping (DraftIngredient) -> Void, onDelete: (()-> Void)? = nil) {
 		_draftIngredient = State(initialValue: draftIngredient)
+        _isShowingRange = State(initialValue: !(draftIngredient.range ?? "").isEmpty)
 		self.onSave = onSave
 		self.onDelete = onDelete
 	}
@@ -39,27 +40,55 @@ struct IngredientEditor: View {
 	@FocusState private var focusedField: Field?
 	@FocusState private var isFocused: Bool
 	
+
+	
 	//MARK: - Add Fraction
 	private func addFrac (_ fraction: String) {
-		var parts = draftIngredient.amount.split(separator: " ")
 		
-		if parts.isEmpty {
-			draftIngredient.amount = fraction
+		let currentText: String
+		
+		if focusedField == .amount {
+			currentText = draftIngredient.amount
+		} else if focusedField == .range {
+			currentText = draftIngredient.range ?? ""
+		}
+		else {
 			return
 		}
+		
+		var parts = currentText.split(separator: " ")
+		
 		
 		if let lastPart = parts.last {
 			if lastPart.contains("/") {
 				parts.removeLast()
 			}
 		}
+		
 		parts.append(Substring(fraction))
-		draftIngredient.amount = parts.joined(separator: " ")
+		let updatedText = parts.joined(separator: " ")
+		if focusedField == .amount {
+			draftIngredient.amount = updatedText
+		} else if focusedField == .range {
+			draftIngredient.range = updatedText
+		}
+		
 	}
 	
 	
 	@State private var isShowingRange = false
 	
+	
+	//MARK: -keyboard toolbar validation
+	private var disableFrac: Bool{
+		if focusedField == .amount {
+			return draftIngredient.amount.contains(".")
+		} else if focusedField == .range {
+			return (draftIngredient.range ?? "").contains(".")
+		} else {
+			return false
+		}
+	}
     var body: some View {
         ScrollView {
 			VStack {
@@ -101,56 +130,7 @@ struct IngredientEditor: View {
 								.focused($focusedField, equals: .amount)
 								.font(.title3)
 								.frame(width: 80)
-								.toolbar {
-									ToolbarItemGroup(placement: .keyboard) {
-										if focusedField == .amount {
-											Group {
-												Button {
-													addFrac("1/8")
-												} label: {
-													Text("1/8")
-												}
-												Button {
-													addFrac("1/4")
-												} label: {
-													Text("1/4")
-												}
-												
-												Button {
-													addFrac("1/3")
-												} label: {
-													Text("1/3")
-												}
-												
-												Button {
-													addFrac("1/2")
-												} label: {
-													Text("1/2")
-												}
-												
-												Button {
-													addFrac("2/3")
-												} label: {
-													Text("2/3")
-												}
-												
-												Button {
-													addFrac("3/4")
-												} label: {
-													Text("3/4")
-												}
-											}
-											.disabled(draftIngredient.amount.contains("."))
-											
-											Button {
-												focusedField = nil
-											} label: {
-												Image(systemName: "checkmark.circle.fill")
-											}
-										}
-									}
-                                    
-								}
+								
 							
 							// Amount Range optional
 							if isShowingRange == true {
@@ -166,64 +146,17 @@ struct IngredientEditor: View {
 									}
 								))
                                 .focused($focusedField, equals: .range)
+                                .font(.title3)
                                 .padding(.leading)
                                 .frame(width: 80)
                                 .keyboardType(.decimalPad)
-                                .toolbar {
-                                    ToolbarItemGroup(placement: .keyboard) {
-                                        if focusedField == .range {
-                                            Group {
-                                                Button {
-                                                    addFrac("1/8")
-                                                } label: {
-                                                    Text("1/8")
-                                                }
-                                                Button {
-                                                    addFrac("1/4")
-                                                } label: {
-                                                    Text("1/4")
-                                                }
-                                                
-                                                Button {
-                                                    addFrac("1/3")
-                                                } label: {
-                                                    Text("1/3")
-                                                }
-                                                
-                                                Button {
-                                                    addFrac("1/2")
-                                                } label: {
-                                                    Text("1/2")
-                                                }
-                                                
-                                                Button {
-                                                    addFrac("2/3")
-                                                } label: {
-                                                    Text("2/3")
-                                                }
-                                                
-                                                Button {
-                                                    addFrac("3/4")
-                                                } label: {
-                                                    Text("3/4")
-                                                }
-                                            }
-                                            .disabled(draftIngredient.range.contains("."))
-                                            
-                                            Button {
-                                                focusedField = nil
-                                            } label: {
-                                                Image(systemName: "checkmark.circle.fill")
-                                            }
-                                        }
-                                    }
-                                    
-                                }
+								
+
 							}
 							
 							Divider()
 								.frame(height: 30)
-								.frame(width: 50)
+//								.frame(width: 50)
 							
 							// Unit picker
                             Picker("Unit", selection: $draftIngredient.unit) {
@@ -234,7 +167,8 @@ struct IngredientEditor: View {
                                     
                                 }
                             }
-                            .frame(width: 80)
+                            .tint(.primary)
+                            .fixedSize(horizontal: true, vertical: false)
 						}
 				}
                 .background {
@@ -295,6 +229,56 @@ struct IngredientEditor: View {
 				}
 			}
         }
+		.toolbar {
+			ToolbarItemGroup(placement: .keyboard) {
+				if focusedField == .amount || focusedField == .range {
+					Group {
+						Button {
+							addFrac("1/8")
+						} label: {
+							Text("1/8")
+						}
+						Button {
+							addFrac("1/4")
+						} label: {
+							Text("1/4")
+						}
+						
+						Button {
+							addFrac("1/3")
+						} label: {
+							Text("1/3")
+						}
+						
+						Button {
+							addFrac("1/2")
+						} label: {
+							Text("1/2")
+						}
+						
+						Button {
+							addFrac("2/3")
+						} label: {
+							Text("2/3")
+						}
+						
+						Button {
+							addFrac("3/4")
+						} label: {
+							Text("3/4")
+						}
+					}
+					.disabled(disableFrac)
+					
+					Button {
+						focusedField = nil
+					} label: {
+						Image(systemName: "checkmark.circle.fill")
+					}
+				}
+			}
+			
+		}
 		.background(Color(uiColor: .systemBackground))
         .navigationBarTitle("Editor Screen")
         .navigationBarTitleDisplayMode(.inline)

@@ -213,6 +213,7 @@ struct NewRecipe: View {
 								let newIngredient = Ingredient(
 									name: savedDraft.name,
 									amount: savedDraft.amount,
+                                    range: savedDraft.range,
 									unit: savedDraft.unit,
 									notes: savedDraft.notes
 								)

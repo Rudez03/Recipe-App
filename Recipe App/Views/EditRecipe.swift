@@ -419,6 +419,7 @@ private extension EditRecipe {
             }) {
                 matching.name = draftIngredient.name
                 matching.amount = draftIngredient.amount
+                matching.range = draftIngredient.range
                 matching.unit = draftIngredient.unit
                 matching.notes = draftIngredient.notes
             }
@@ -426,6 +427,7 @@ private extension EditRecipe {
                 let newIngredient = Ingredient(
                         name: draftIngredient.name,
                         amount: draftIngredient.amount,
+                        range: draftIngredient.range,
                         unit: draftIngredient.unit,
                         notes: draftIngredient.notes
                     )
